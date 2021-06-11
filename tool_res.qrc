@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/dialog_close.png</file>
+        <file>res/progressbardriverdowngbg.png</file>
+        <file>res/progressbardriverdowngfront.png</file>
+        <file>res/installDrv_done.png</file>
+        <file>res/installIOSDrv_ing.gif</file>
+        <file>res/repairIcon.png</file>
+        <file>res/tipiconpng.png</file>
+    </qresource>
+</RCC>

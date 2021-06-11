@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ToolWnd</class>
+ <widget class="QWidget" name="ToolWnd">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>444</width>
+    <height>335</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="leftMargin">
+    <number>8</number>
+   </property>
+   <property name="topMargin">
+    <number>8</number>
+   </property>
+   <property name="rightMargin">
+    <number>8</number>
+   </property>
+   <property name="bottomMargin">
+    <number>8</number>
+   </property>
+   <item>
+    <widget class="QWidget" name="widget" native="true">
+     <property name="styleSheet">
+      <string notr="true">QWidget#widget
+{
+	background-color: rgb(255, 255, 255);
+    border-raduis: 4px;
+}</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QWidget" name="titleBar" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>44</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QWidget#titleBar
+{
+    background-color: rgb(233, 236, 238);
+}</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <property name="leftMargin">
+          <number>10</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="titleLab">
+           <property name="styleSheet">
+            <string notr="true">QWidget#titleLab{
+    color: rgb(51, 51, 51);
+    font: 14pt &quot;Microsoft YaHei UI&quot;;
+}
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="closeBtn">
+           <property name="minimumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#closeBtn {
+	border-image: url(:/res/dialog_close.png) 0 0 96 0;
+}
+
+QPushButton#closeBtn:hover {
+	border-image: url(:/res/dialog_close.png) 32 0 64 0;
+}
+
+QPushButton#closeBtn:pressed {
+	border-image: url(:/res/dialog_close.png) 64 0 32 0;
+}
+
+QPushButton#closeBtn:disabled {
+	border-image: url(:/res/dialog_close.png) 96 0 0 0;
+}</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QStackedWidget" name="m_stackedWidgetDrv">
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="MMDownDrvPage">
+         <widget class="QLabel" name="MMDownDrvLbl">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>120</y>
+            <width>361</width>
+            <height>31</height>
+           </rect>
+          </property>
+          <property name="font">
+           <font>
+            <family>Microsoft YaHei UI</family>
+            <pointsize>12</pointsize>
+            <weight>50</weight>
+            <italic>false</italic>
+            <bold>false</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">font: 12pt &quot;Microsoft YaHei UI&quot;;
+color: rgb(51, 51, 51);</string>
+          </property>
+          <property name="text">
+           <string>iTunes驱动下载中，请稍等...</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="m_CancelBtn">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="geometry">
+           <rect>
+            <x>170</x>
+            <y>210</y>
+            <width>90</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>90</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>90</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton#m_CancelBtn
+{
+	font-size: 11px;
+	border-width: 1px;
+	border-style: solid;
+	border-color:rgb(153,153,153);
+	color:rgb(100,105,108);
+	background-color:rgb(255,255,255);
+}
+
+QPushButton#m_CancelBtn:hover
+{
+	background-color:rgb(223,236,238);
+}
+
+QPushButton#m_CancelBtn:pressed
+{
+	background-color:rgb(216,218,219);
+}</string>
+          </property>
+          <property name="text">
+           <string>取消</string>
+          </property>
+         </widget>
+         <widget class="QProgressBar" name="m_pProgDriverDown">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>160</y>
+            <width>360</width>
+            <height>4</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QProgressBar#m_pProgDriverDown
+{
+	min-height: 4px;
+	max-height: 4px;
+	border-image: url(:/res/progressbardriverdowngbg.png);
+}
+
+QProgressBar#m_pProgDriverDown:chunk
+{
+	min-height: 4px;
+	max-height: 4px;
+	border-image: url(:/res/progressbardriverdowngfront.png);
+}</string>
+          </property>
+          <property name="textVisible">
+           <bool>false</bool>
+          </property>
+         </widget>
+         <widget class="QLabel" name="MMDownDrvIcon">
+          <property name="geometry">
+           <rect>
+            <x>140</x>
+            <y>10</y>
+            <width>148</width>
+            <height>103</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap>:/res/driverdownload/installAndroidDrv_ing.gif</pixmap>
+          </property>
+         </widget>
+         <widget class="QWidget" name="horizontalLayoutWidget">
+          <property name="geometry">
+           <rect>
+            <x>210</x>
+            <y>170</y>
+            <width>181</width>
+            <height>31</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <property name="spacing">
+            <number>2</number>
+           </property>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="MMDownDrvReceived">
+             <property name="font">
+              <font>
+               <family>Microsoft YaHei UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: rgb(51, 51, 51);
+font: 11pt &quot;Microsoft YaHei UI&quot;;</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>10</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Microsoft YaHei UI</family>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="MMDownDrvTotalSize">
+             <property name="font">
+              <font>
+               <family>Microsoft YaHei UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: rgb(51, 51, 51);
+font: 11pt &quot;Microsoft YaHei UI&quot;;</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="horizontalLayoutWidget_2">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>170</y>
+            <width>141</width>
+            <height>31</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QLabel" name="MMDownDrvSpeed">
+             <property name="font">
+              <font>
+               <family>Microsoft YaHei UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: rgb(51, 51, 51);
+font: 11pt &quot;Microsoft YaHei UI&quot;;</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="MMInstallingPage">
+         <widget class="QLabel" name="MMInstallingDrvLab">
+          <property name="geometry">
+           <rect>
+            <x>70</x>
+            <y>160</y>
+            <width>271</width>
+            <height>31</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">font: 12pt &quot;Microsoft YaHei UI&quot;;
+color: rgb(51, 51, 51);</string>
+          </property>
+          <property name="text">
+           <string>iTunes驱动安装中,请稍等...</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="MMInstallingDrvFile">
+          <property name="geometry">
+           <rect>
+            <x>70</x>
+            <y>200</y>
+            <width>271</width>
+            <height>21</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">font: 11pt &quot;Microsoft YaHei UI&quot;;
+color: rgb(151, 151, 151);</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+         <widget class="QLabel" name="MMInstallingDrvIcon">
+          <property name="geometry">
+           <rect>
+            <x>130</x>
+            <y>20</y>
+            <width>148</width>
+            <height>103</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="MMInstallSuccPage">
+         <widget class="QLabel" name="MMInstallDrvSuccLab">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>150</y>
+            <width>391</width>
+            <height>33</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">font: 16pt &quot;Microsoft YaHei UI&quot;;
+color: #1983fd;</string>
+          </property>
+          <property name="text">
+           <string>iTunes驱动安装成功！</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+         <widget class="QLabel" name="MMInstallDrvWarnLab">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>190</y>
+            <width>411</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">font: 12pt &quot;Microsoft YaHei UI&quot;;
+color: rgb(151, 151, 151);</string>
+          </property>
+          <property name="text">
+           <string>若未检测到设备连接,请拔出USB插口重试</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::AutoText</enum>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+         <widget class="QLabel" name="MMInstallSuccIcon">
+          <property name="geometry">
+           <rect>
+            <x>130</x>
+            <y>20</y>
+            <width>148</width>
+            <height>103</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border-image: url(:/res/installDrv_done.png);</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap>:/res/driverdownload/installDrv_done.png</pixmap>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="MMInstallDrvFailedPage">
+         <widget class="QLabel" name="MMInstallDrvMsg">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>170</y>
+            <width>371</width>
+            <height>51</height>
+           </rect>
+          </property>
+          <property name="font">
+           <font>
+            <family>Microsoft YaHei UI</family>
+           </font>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+         <widget class="QWidget" name="horizontalLayoutWidget_3">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>120</y>
+            <width>401</width>
+            <height>41</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="MMInstallDrvFailedLab">
+             <property name="font">
+              <font>
+               <family>Microsoft YaHei UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
+             <property name="text">
+              <string>驱动下载失败...</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
