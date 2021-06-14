@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>665</width>
-    <height>376</height>
+    <width>688</width>
+    <height>485</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -354,7 +354,80 @@ QPushButton:pressed
           </widget>
          </item>
          <item>
-          <widget class="QWidget" name="widget_appleMDSupoort" native="true">
+          <widget class="QWidget" name="widget_appleUSBConnect" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>38</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>38</height>
+            </size>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_11">
+            <property name="leftMargin">
+             <number>20</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>20</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_19">
+              <property name="text">
+               <string>已连接的USB设备</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_noconnect">
+              <property name="styleSheet">
+               <string notr="true">color: rgb(255, 0, 0);</string>
+              </property>
+              <property name="text">
+               <string>未检测到设备连接</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_iPhone">
+              <property name="text">
+               <string>iPhone</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="widget_appleMDSupoort64" native="true">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -388,7 +461,106 @@ QPushButton:pressed
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_8">
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_amds64_install">
+              <property name="styleSheet">
+               <string notr="true">color: rgb(68, 161, 234);</string>
+              </property>
+              <property name="text">
+               <string>已安装</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_amds64_no">
+              <property name="styleSheet">
+               <string notr="true">color: rgb(255, 0, 0);</string>
+              </property>
+              <property name="text">
+               <string>未安装</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="widget_appleMDSupoort32" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>38</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>38</height>
+            </size>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <property name="leftMargin">
+             <number>20</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>20</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_17">
+              <property name="text">
+               <string>Apple Mobile Device Support</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_amds_install">
+              <property name="styleSheet">
+               <string notr="true">color: rgb(68, 161, 234);</string>
+              </property>
+              <property name="text">
+               <string>已安装</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_amds_no">
+              <property name="styleSheet">
+               <string notr="true">color: rgb(255, 0, 0);</string>
+              </property>
               <property name="text">
                <string>未安装</string>
               </property>
@@ -435,7 +607,33 @@ QPushButton:pressed
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_10">
+             <spacer name="horizontalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_appsupport32_install">
+              <property name="styleSheet">
+               <string notr="true">color: rgb(68, 161, 234);</string>
+              </property>
+              <property name="text">
+               <string>已安装</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_appsupport32_no">
+              <property name="styleSheet">
+               <string notr="true">color: rgb(255, 0, 0);</string>
+              </property>
               <property name="text">
                <string>未安装</string>
               </property>
@@ -448,7 +646,7 @@ QPushButton:pressed
           </widget>
          </item>
          <item>
-          <widget class="QWidget" name="widget_4" native="true">
+          <widget class="QWidget" name="widget_appleAppSupport64" native="true">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -482,7 +680,33 @@ QPushButton:pressed
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_12">
+             <spacer name="horizontalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_appsupport64_install">
+              <property name="styleSheet">
+               <string notr="true">color: rgb(68, 161, 234);</string>
+              </property>
+              <property name="text">
+               <string>已安装</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_appsupport64_no">
+              <property name="styleSheet">
+               <string notr="true">color: rgb(255, 0, 0);</string>
+              </property>
               <property name="text">
                <string>未安装</string>
               </property>
@@ -529,7 +753,33 @@ QPushButton:pressed
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_14">
+             <spacer name="horizontalSpacer_6">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_have_start">
+              <property name="styleSheet">
+               <string notr="true">color: rgb(68, 161, 234);</string>
+              </property>
+              <property name="text">
+               <string>已启动</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_no_start">
+              <property name="styleSheet">
+               <string notr="true">color: rgb(255, 0, 0);</string>
+              </property>
               <property name="text">
                <string>未启动</string>
               </property>
@@ -548,8 +798,8 @@ QPushButton:pressed
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>20</width>
-             <height>40</height>
+             <width>17</width>
+             <height>76</height>
             </size>
            </property>
           </spacer>

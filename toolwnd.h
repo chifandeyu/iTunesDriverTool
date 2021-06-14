@@ -11,8 +11,6 @@ class ToolWnd;
 
 #include "commonWidget.h"
 
-class httpDownload;
-
 class ToolWnd : public commonWidget
 {
     Q_OBJECT
@@ -35,20 +33,21 @@ public:
     void InitInstallDrvFailedFrame(QString);
     void setInsatllFileName(QString name);
     void changeIOSGif();
-    void setProgressValue( int val ,qint64 bytesReceived=0,qint64 bytesTotal=0, QString strSpeed="");
-    void startDownloadDriver(const QString& fileUrl);
+    void setProgressValue(qint64 bytesReceived, qint64 bytesTotal, const QString& strSpeed);
+    void onErorr(const QString& errStr);
+    void onStartDownload();
+    void onDownloadFinished();
 
 protected:
     void showDialog();
+signals:
+    void sigCancel();
 
 private slots:
     void on_closeBtn_clicked();
 
 public slots:
-    void slotProgress(qint64 bytesReceived, qint64 bytesTotal, const QString& strSpeed);
-    void slotErorr(const QString& errStr);
-    void slotStartDownload();
-    void slotFinished();
+    
     void slotCancel();
 
 private:
@@ -57,8 +56,6 @@ private:
 private:
     Ui::ToolWnd *ui;
     QMovie* m_pIOSMovie;
-    httpDownload* m_pDownloader = nullptr;
-    QString m_fileUrl;
 };
 
 #endif // TOOLWND_H

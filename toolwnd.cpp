@@ -4,7 +4,38 @@
 #include <QMovie>
 #include <QDebug>
 #include <QMessageBox>
-#include "httpDownload.h"
+#include <QFile>
+#include <QJsonParseError>
+
+//获取Json文件信息
+QString ReadJsonFile(const QString& strPath)
+{
+    qDebug() << " entry";
+    QFile file(strPath);
+
+    if (!file.exists(strPath))
+    {
+        std::string strPrintf = strPath.toLocal8Bit();
+        qDebug() << strPrintf.c_str() << " not exist!";
+        return QString("");
+    }
+
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        std::string strPrintf = strPath.toLocal8Bit();
+        qDebug() << "open file failed : " << strPrintf.c_str();
+        return QString("");
+    }
+
+    QTextStream in(&file);
+    QString strRet;
+    in >> strRet;
+
+    file.close();
+
+    qDebug() << " leave";
+    return strRet;
+}
 
 ToolWnd::ToolWnd(QWidget *parent) :
     commonWidget(parent),
@@ -22,10 +53,6 @@ ToolWnd::ToolWnd(QWidget *parent) :
 
 ToolWnd::~ToolWnd()
 {
-    if (m_pDownloader) {
-        m_pDownloader->deleteLater();
-        m_pDownloader = nullptr;
-    }
     delete ui;
 }
 
@@ -76,22 +103,27 @@ void ToolWnd::changeIOSGif()
         qDebug() << "IOS Movie is invalid";
 }
 
-void ToolWnd::setProgressValue(int val, qint64 bytesReceived, qint64 bytesTotal, QString strSpeed)
+void ToolWnd::setProgressValue(qint64 bytesReceived, qint64 bytesTotal, const QString& strSpeed)
 {
-
+    ui->m_pProgDriverDown->setMaximum(bytesTotal);
+    ui->m_pProgDriverDown->setValue(bytesReceived);
+    ui->MMDownDrvSpeed->setText(strSpeed);
 }
 
-void ToolWnd::startDownloadDriver(const QString& fileUrl)
+void ToolWnd::onErorr(const QString & errStr)
 {
-    m_fileUrl = fileUrl;
-    if (m_pDownloader) {
-        m_pDownloader->cancel();
-        m_pDownloader->deleteLater();
-        m_pDownloader = nullptr;
-    }
-    m_pDownloader = new httpDownload();
-    connSigSlot();
-    m_pDownloader->download(fileUrl);
+    QMessageBox::warning(this, QStringLiteral("Error"), QStringLiteral("file download failed: %1").arg(errStr), QMessageBox::Yes);
+    close();
+}
+
+void ToolWnd::onStartDownload()
+{
+    InitDownloadIosDrvFrame();
+}
+
+void ToolWnd::onDownloadFinished()
+{
+    InitInstallIosDrvFrame();
 }
 
 void ToolWnd::showDialog()
@@ -105,44 +137,11 @@ void ToolWnd::showDialog()
 
 void ToolWnd::on_closeBtn_clicked()
 {
-    if (m_pDownloader && m_pDownloader->isDownload()) {
-        m_pDownloader->cancel();
-    }
+    emit sigCancel();
     close();
-}
-
-void ToolWnd::slotProgress(qint64 bytesReceived, qint64 bytesTotal, const QString& strSpeed)
-{
-    ui->m_pProgDriverDown->setMaximum(bytesTotal);
-    ui->m_pProgDriverDown->setValue(bytesReceived);
-    ui->MMDownDrvSpeed->setText(strSpeed);
-}
-
-void ToolWnd::slotErorr(const QString& errStr)
-{
-    QMessageBox::warning(this, QStringLiteral("Error"), QStringLiteral("file download failed: %1").arg(errStr), QMessageBox::Yes);
-    close();
-}
-
-void ToolWnd::slotStartDownload()
-{
-
-}
-
-void ToolWnd::slotFinished()
-{
-    InitInstallIosDrvFrame();
 }
 
 void ToolWnd::slotCancel()
 {
 
-}
-
-void ToolWnd::connSigSlot()
-{
-    connect(m_pDownloader, &httpDownload::sigErorr, this, &ToolWnd::slotErorr);
-    connect(m_pDownloader, &httpDownload::sigStartDownload, this, &ToolWnd::slotStartDownload);
-    connect(m_pDownloader, &httpDownload::sigProgress, this, &ToolWnd::slotProgress);
-    connect(m_pDownloader, &httpDownload::sigFinished, this, &ToolWnd::slotFinished);
 }

@@ -10,6 +10,8 @@ CONFIG += c++11
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
+QMAKE_LFLAGS += /MANIFESTUAC:"level='requireAdministrator'uiAccess='false'"
+
 # You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
@@ -17,22 +19,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     RepairDriver.cpp \
-    driverdownload.cpp \
     itunesservice.cpp \
     main.cpp \
     toolwnd.cpp \
 	httpDownload.cpp \
 	commonWidget.cpp \
-	iTunesDriverInstall.cpp
+	iTunesDriverInstall.cpp \
+	SoftMgr.cpp
 
 HEADERS += \
     RepairDriver.h \
-    driverdownload.h \
     itunesservice.h \
     toolwnd.h \
 	httpDownload.h \
 	commonWidget.h \
-	iTunesDriverInstall.h
+	iTunesDriverInstall.h \
+	SoftMgr.h
 
 FORMS += \
     RepairDriver.ui \

@@ -1,4 +1,18 @@
 {
+	"packages": [
+	    {
+			"OSBITS": 32,
+			"md5": "75653A68119E50AFD1D819BC5631C04C",
+            "url": "http://10.238.7.154/AppleApplicationSupport.msi",
+            "size": 48848896
+		},
+		{
+			"OSBITS": 64,
+			"md5": "75653A68119E50AFD1D819BC5631C04C",
+            "url": "http://10.238.7.154/itunes_64.zip",
+            "size": 2363462345
+		}
+	],
 	"version": "12.10.0.7",
 	"files": [
 		{

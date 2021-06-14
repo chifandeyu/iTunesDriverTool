@@ -66,6 +66,9 @@
     <ClCompile Include="httpDownload.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="iTunesDriverInstall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="itunesservice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -75,8 +78,8 @@
     <ClCompile Include="toolwnd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="iTunesDriverInstall.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="SoftMgr.cpp">
+      <Filter>Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,14 +92,17 @@
     <QtMoc Include="httpDownload.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="iTunesDriverInstall.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
     <QtMoc Include="itunesservice.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="toolwnd.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="iTunesDriverInstall.h">
-      <Filter>Header Files</Filter>
+    <QtMoc Include="SoftMgr.h">
+      <Filter>Generated Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

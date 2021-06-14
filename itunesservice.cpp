@@ -1,26 +1,11 @@
 #include "itunesservice.h"
 #include <windows.h>
 #include <QDebug>
+#include <QFile>
+#include <QCryptographicHash>
 
 typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
 LPFN_ISWOW64PROCESS fnIsWow64Process;
-
-//IsWow64返回TRUE则是64位系统，否则为32位系统。
-bool IsWow64()
-{
-    BOOL bIsWow64 = FALSE;
-    fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(
-        GetModuleHandle(TEXT("kernel32")),"IsWow64Process");
-
-    if(NULL != fnIsWow64Process)
-    {
-        if (!fnIsWow64Process(GetCurrentProcess(),&bIsWow64))
-        {
-            return FALSE;
-        }
-    }
-    return (bIsWow64 == TRUE);
-}
 
 bool IsServiceRunning(LPCTSTR pszName)
 {
@@ -109,6 +94,36 @@ iTunesServiceCheck::iTunesServiceCheck(QObject *parent) : QObject(parent)
 
 }
 
+//IsWow64返回TRUE则是64位系统，否则为32位系统。
+bool iTunesServiceCheck::IsWow64()
+{
+    BOOL bIsWow64 = FALSE;
+    fnIsWow64Process = (LPFN_ISWOW64PROCESS)GetProcAddress(
+        GetModuleHandle(TEXT("kernel32")), "IsWow64Process");
+
+    if (NULL != fnIsWow64Process)
+    {
+        if (!fnIsWow64Process(GetCurrentProcess(), &bIsWow64))
+        {
+            return FALSE;
+        }
+    }
+    return (bIsWow64 == TRUE);
+}
+
+QString iTunesServiceCheck::fileMd5(const QString & filePath)
+{
+    QString sMd5;
+    QFile file(filePath);
+    if (file.open(QIODevice::ReadOnly))
+    {
+        QByteArray bArray = QCryptographicHash::hash(file.readAll(), QCryptographicHash::Md5);
+        sMd5 = QString(bArray.toHex()).toUpper();
+    }
+    file.close();
+    return sMd5;
+}
+
 int iTunesServiceCheck::InitEnvironment()
 {
     /*
@@ -191,7 +206,15 @@ bool iTunesServiceCheck::servicIsRunning()
     return IsServiceRunning(L"Apple Mobile Device Service");
 }
 
-bool iTunesServiceCheck::checkAppleAppSupport()
+bool iTunesServiceCheck::checkApplicationSupport32()
+{
+    wchar_t InstallDir[MAX_PATH];
+    bool hasInstall = checkReg("SOFTWARE\\Apple Inc.\\Apple Application Support", "InstallDir", InstallDir, true);
+    QString ret = QString::fromWCharArray(InstallDir);
+    return hasInstall;
+}
+
+bool iTunesServiceCheck::checkApplicationSupport64()
 {
     wchar_t InstallDir[MAX_PATH];
     bool hasInstall = checkReg("SOFTWARE\\Apple Inc.\\Apple Application Support", "InstallDir", InstallDir);
@@ -199,15 +222,23 @@ bool iTunesServiceCheck::checkAppleAppSupport()
     return hasInstall;
 }
 
-bool iTunesServiceCheck::checkAppleMDeviceSupport()
+bool iTunesServiceCheck::checkMobileDeviceSupport32()
 {
     wchar_t InstallDir[MAX_PATH];
-    bool hasInstall = checkReg("SOFTWARE\\Apple Inc.\\Apple Mobile Device Support", "InstallDir", InstallDir);
+    bool hasInstall = checkReg("SOFTWARE\\Apple Inc.\\Apple Mobile Device Support", "InstallDir", InstallDir, true);
     QString ret = QString::fromWCharArray(InstallDir);
     return hasInstall;
 }
 
-bool iTunesServiceCheck::checkReg(const QString& strKey, const QString& strName, wchar_t* pWszValue)
+bool iTunesServiceCheck::checkMobileDeviceSupport64()
+{
+    wchar_t InstallDir[MAX_PATH];
+    bool hasInstall = checkReg("SOFTWARE\\Apple Inc.\\Apple Mobile Device Support", "InstallDir", InstallDir, true);
+    QString ret = QString::fromWCharArray(InstallDir);
+    return hasInstall;
+}
+
+bool iTunesServiceCheck::checkReg(const QString& strKey, const QString& strName, wchar_t* pWszValue, bool check32_Bit)
 {
     LSTATUS lStatus = ERROR_SUCCESS;
     HKEY hKey = NULL;
@@ -219,7 +250,12 @@ bool iTunesServiceCheck::checkReg(const QString& strKey, const QString& strName,
     //Apple Application Support
     bool is64Bit = IsWow64();
     if (is64Bit) {
-        lStatus = RegOpenKeyEx(HKEY_LOCAL_MACHINE, wszKey/*L"SOFTWARE\\Apple Inc.\\Apple Application Support"*/, 0, KEY_READ|KEY_WOW64_64KEY, &hKey);
+        if (check32_Bit) {
+            lStatus = RegOpenKeyEx(HKEY_LOCAL_MACHINE, wszKey/*L"SOFTWARE\\Apple Inc.\\Apple Application Support"*/, 0, KEY_READ | KEY_WOW64_32KEY, &hKey);
+        }
+        else {
+            lStatus = RegOpenKeyEx(HKEY_LOCAL_MACHINE, wszKey/*L"SOFTWARE\\Apple Inc.\\Apple Application Support"*/, 0, KEY_READ | KEY_WOW64_64KEY, &hKey);
+        }
     }
     else {
         lStatus = RegOpenKeyW(HKEY_LOCAL_MACHINE, wszKey/*L"SOFTWARE\\Apple Inc.\\Apple Application Support"*/, &hKey);
