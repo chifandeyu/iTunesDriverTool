@@ -112,6 +112,9 @@ font: 75 12pt &quot;Microsoft YaHei UI&quot;;</string>
              <height>32</height>
             </size>
            </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
            <property name="styleSheet">
             <string notr="true">QPushButton#closeBtn {
 	border-image: url(:/res/dialog_close.png) 0 0 96 0;
@@ -233,6 +236,36 @@ font-family:Microsoft YaHei;</string>
           </layout>
          </item>
          <item>
+          <widget class="QPushButton" name="m_pUpdateBtn">
+           <property name="minimumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="toolTip">
+            <string>刷新</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#m_pUpdateBtn{
+border-image:url(:/res/update_icon.png);
+}</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="pushButton">
            <property name="minimumSize">
             <size>
@@ -245,6 +278,9 @@ font-family:Microsoft YaHei;</string>
              <width>120</width>
              <height>40</height>
             </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="styleSheet">
             <string notr="true">QPushButton

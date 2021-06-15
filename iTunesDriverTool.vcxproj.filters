@@ -60,6 +60,9 @@
     <ClCompile Include="RepairDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SoftMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="commonWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -75,15 +78,15 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="toolwnd.cpp">
+    <ClCompile Include="iTunesDriverDlg.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SoftMgr.cpp">
-      <Filter>Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="RepairDriver.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="SoftMgr.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="commonWidget.h">
@@ -98,11 +101,8 @@
     <QtMoc Include="itunesservice.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="toolwnd.h">
+    <QtMoc Include="iTunesDriverDlg.h">
       <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="SoftMgr.h">
-      <Filter>Generated Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -122,7 +122,7 @@
     <QtUic Include="RepairDriver.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="toolwnd.ui">
+    <QtUic Include="iTunesDriverDlg.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

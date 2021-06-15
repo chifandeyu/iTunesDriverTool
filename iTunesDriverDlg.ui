@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ToolWnd</class>
- <widget class="QWidget" name="ToolWnd">
+ <class>iTunesDriverDlg</class>
+ <widget class="QDialog" name="iTunesDriverDlg">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>444</width>
-    <height>335</height>
+    <width>441</width>
+    <height>333</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>iTunesDriverDlg</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <property name="leftMargin">
     <number>8</number>
    </property>
@@ -407,40 +410,6 @@ font: 11pt &quot;Microsoft YaHei UI&quot;;</string>
          </widget>
         </widget>
         <widget class="QWidget" name="MMInstallingPage">
-         <widget class="QLabel" name="MMInstallingDrvLab">
-          <property name="geometry">
-           <rect>
-            <x>70</x>
-            <y>160</y>
-            <width>271</width>
-            <height>31</height>
-           </rect>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">font: 12pt &quot;Microsoft YaHei UI&quot;;
-color: rgb(51, 51, 51);</string>
-          </property>
-          <property name="text">
-           <string>iTunes驱动安装中,请稍等...</string>
-          </property>
-         </widget>
-         <widget class="QLabel" name="MMInstallingDrvFile">
-          <property name="geometry">
-           <rect>
-            <x>70</x>
-            <y>200</y>
-            <width>271</width>
-            <height>21</height>
-           </rect>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">font: 11pt &quot;Microsoft YaHei UI&quot;;
-color: rgb(151, 151, 151);</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
          <widget class="QLabel" name="MMInstallingDrvIcon">
           <property name="geometry">
            <rect>
@@ -453,6 +422,46 @@ color: rgb(151, 151, 151);</string>
           <property name="text">
            <string/>
           </property>
+         </widget>
+         <widget class="QWidget" name="horizontalLayoutWidget_4">
+          <property name="geometry">
+           <rect>
+            <x>50</x>
+            <y>180</y>
+            <width>371</width>
+            <height>51</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <widget class="QLabel" name="MMInstallingDrvLab">
+             <property name="maximumSize">
+              <size>
+               <width>74</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">font: 12pt &quot;Microsoft YaHei UI&quot;;
+color: rgb(84, 84, 84);</string>
+             </property>
+             <property name="text">
+              <string>正在安装</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="MMInstallingDrvFile">
+             <property name="styleSheet">
+              <string notr="true">font: 11pt &quot;Microsoft YaHei UI&quot;;
+color: rgb(84, 84, 84)</string>
+             </property>
+             <property name="text">
+              <string>AppleApplicationSupport</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </widget>
         <widget class="QWidget" name="MMInstallSuccPage">
@@ -523,6 +532,9 @@ color: rgb(151, 151, 151);</string>
          </widget>
         </widget>
         <widget class="QWidget" name="MMInstallDrvFailedPage">
+         <property name="styleSheet">
+          <string notr="true">font: 12pt &quot;Microsoft YaHei UI&quot;;\ncolor: rgb(51, 51, 51);</string>
+         </property>
          <widget class="QLabel" name="MMInstallDrvMsg">
           <property name="geometry">
            <rect>
@@ -535,6 +547,10 @@ color: rgb(151, 151, 151);</string>
           <property name="font">
            <font>
             <family>Microsoft YaHei UI</family>
+            <pointsize>12</pointsize>
+            <weight>50</weight>
+            <italic>false</italic>
+            <bold>false</bold>
            </font>
           </property>
           <property name="text">
@@ -575,8 +591,9 @@ color: rgb(151, 151, 151);</string>
              <property name="font">
               <font>
                <family>Microsoft YaHei UI</family>
-               <pointsize>11</pointsize>
+               <pointsize>12</pointsize>
                <weight>50</weight>
+               <italic>false</italic>
                <bold>false</bold>
               </font>
              </property>
@@ -607,6 +624,87 @@ color: rgb(151, 151, 151);</string>
           </layout>
          </widget>
         </widget>
+        <widget class="QWidget" name="UninstallDrvPage">
+         <property name="styleSheet">
+          <string notr="true">font: 12pt &quot;Microsoft YaHei UI&quot;;\ncolor: rgb(51, 51, 51);</string>
+         </property>
+         <widget class="QWidget" name="">
+          <property name="geometry">
+           <rect>
+            <x>60</x>
+            <y>80</y>
+            <width>296</width>
+            <height>72</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_7">
+           <item>
+            <widget class="QLabel" name="label_3">
+             <property name="minimumSize">
+              <size>
+               <width>70</width>
+               <height>70</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>70</width>
+               <height>70</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">border-image: url(:/res/fix_icon.png);</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <item>
+              <widget class="QLabel" name="label_2">
+               <property name="font">
+                <font>
+                 <family>Microsoft YaHei UI</family>
+                 <pointsize>12</pointsize>
+                 <weight>50</weight>
+                 <italic>false</italic>
+                 <bold>false</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>正在卸载旧的驱动，请稍等......</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_4">
+               <property name="font">
+                <font>
+                 <family>Microsoft YaHei UI</family>
+                 <pointsize>12</pointsize>
+                 <weight>50</weight>
+                 <italic>false</italic>
+                 <bold>false</bold>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">color: rgb(138, 138, 138);</string>
+               </property>
+               <property name="text">
+                <string>卸载旧驱动过程中请勿关闭</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </widget>
        </widget>
       </item>
      </layout>
@@ -614,6 +712,7 @@ color: rgb(151, 151, 151);</string>
    </item>
   </layout>
  </widget>
+ <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
 </ui>

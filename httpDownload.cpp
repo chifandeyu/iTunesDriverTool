@@ -1,5 +1,6 @@
 #include "httpDownload.h"
 #include <QFileInfo>
+#include <QDir>
 
 #define UNIT_KB (1024)           //KB
 #define UNIT_MB (1024*1024)      //MB
@@ -16,7 +17,7 @@ httpDownload::~httpDownload()
     cancel();
 }
 
-bool httpDownload::download(const QString& strUrl)
+bool httpDownload::download(const QString& strUrl, const QString& dir)
 {
     m_url = QUrl(strUrl);
     //将URL路径存入QFileInfo类
@@ -33,9 +34,14 @@ bool httpDownload::download(const QString& strUrl)
         return false;
     }
     else {
+        QDir qdir(dir);
+        if (!qdir.exists()) {
+            qdir.mkdir(dir);
+        }
+        fileName = dir + "\\" + fileName;
         //建立文件
         m_pFile = new QFile(fileName);
-
+        
         //如果文件没有打开的情况
         if (!m_pFile->open((QIODevice::WriteOnly))) {
             delete m_pFile;

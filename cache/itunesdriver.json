@@ -3,49 +3,17 @@
 	    {
 			"OSBITS": 32,
 			"md5": "75653A68119E50AFD1D819BC5631C04C",
-            "url": "http://10.238.7.154/AppleApplicationSupport.msi",
+			"path": ".\\cache\\iTunesOL_Lite_32_12.10.0.7.zip",
+            "url": "http://10.238.7.154/iTunesOL_Lite_32_12.10.0.7.zip",
             "size": 48848896
 		},
 		{
 			"OSBITS": 64,
-			"md5": "75653A68119E50AFD1D819BC5631C04C",
-            "url": "http://10.238.7.154/itunes_64.zip",
-            "size": 2363462345
+			"md5": "974017604BF0850000F9CA4C360293A9",
+			"path": ".\\cache\\iTunesOL_Lite_64_12.10.0.7.zip",
+            "url": "http://10.238.7.154/iTunesOL_Lite_64_12.10.0.7.zip",
+            "size": 115602942
 		}
 	],
-	"version": "12.10.0.7",
-	"files": [
-		{
-			"Index": 1,
-			"md5": "75653A68119E50AFD1D819BC5631C04C",
-			"OSBITS": 32,
-			"fileName": "AppleApplicationSupport.msi",
-			"url": "http://10.238.7.154/AppleApplicationSupport.msi",
-			"size": 48848896
-		},
-		{
-			"Index": 2,
-			"md5": "75653A68119E50AFD1D819BC5631C04C",
-			"OSBITS": 64,
-			"fileName": "AppleApplicationSupport.msi",
-			"url": "http://10.238.7.154/AppleApplicationSupport.msi",
-			"size": 48848896
-		},
-		{
-			"Index": 3,
-			"md5": "75653A68119E50AFD1D819BC5631C04C",
-			"OSBITS": 32,
-			"fileName": "AppleApplicationSupport.msi",
-			"url": "http://10.238.7.154/AppleApplicationSupport.msi",
-			"size": 48848896
-		},
-		{
-			"Index": 4,
-			"md5": "75653A68119E50AFD1D819BC5631C04C",
-			"OSBITS": 64,
-			"fileName": "AppleMobileDeviceSupport64.msi",
-			"url": "http://10.238.7.154/AppleMobileDeviceSupport64.msi",
-			"size": 48848896
-		}
-	]
+	"version": "12.10.0.7"
 }

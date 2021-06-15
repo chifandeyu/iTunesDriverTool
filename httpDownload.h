@@ -14,7 +14,7 @@ public:
     httpDownload(QObject *parent = nullptr);
     virtual ~httpDownload();
 
-    bool download(const QString& strUrl);
+    bool download(const QString& strUrl, const QString &dir);
     void cancel();
     void pause();
     static QString transformUnit(qint64 bytes, bool isSpeed);//大小转成字符串

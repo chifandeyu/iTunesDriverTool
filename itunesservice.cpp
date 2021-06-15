@@ -206,7 +206,7 @@ bool iTunesServiceCheck::servicIsRunning()
     return IsServiceRunning(L"Apple Mobile Device Service");
 }
 
-bool iTunesServiceCheck::checkApplicationSupport32()
+bool iTunesServiceCheck::checkAAS32()
 {
     wchar_t InstallDir[MAX_PATH];
     bool hasInstall = checkReg("SOFTWARE\\Apple Inc.\\Apple Application Support", "InstallDir", InstallDir, true);
@@ -214,7 +214,7 @@ bool iTunesServiceCheck::checkApplicationSupport32()
     return hasInstall;
 }
 
-bool iTunesServiceCheck::checkApplicationSupport64()
+bool iTunesServiceCheck::checkAAS64()
 {
     wchar_t InstallDir[MAX_PATH];
     bool hasInstall = checkReg("SOFTWARE\\Apple Inc.\\Apple Application Support", "InstallDir", InstallDir);
@@ -222,7 +222,7 @@ bool iTunesServiceCheck::checkApplicationSupport64()
     return hasInstall;
 }
 
-bool iTunesServiceCheck::checkMobileDeviceSupport32()
+bool iTunesServiceCheck::checkAMDS32()
 {
     wchar_t InstallDir[MAX_PATH];
     bool hasInstall = checkReg("SOFTWARE\\Apple Inc.\\Apple Mobile Device Support", "InstallDir", InstallDir, true);
@@ -230,7 +230,7 @@ bool iTunesServiceCheck::checkMobileDeviceSupport32()
     return hasInstall;
 }
 
-bool iTunesServiceCheck::checkMobileDeviceSupport64()
+bool iTunesServiceCheck::checkAMDS64()
 {
     wchar_t InstallDir[MAX_PATH];
     bool hasInstall = checkReg("SOFTWARE\\Apple Inc.\\Apple Mobile Device Support", "InstallDir", InstallDir);

@@ -1,4 +1,4 @@
-QT       += core gui network
+QT       += core gui network gui-private
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -21,29 +21,30 @@ SOURCES += \
     RepairDriver.cpp \
     itunesservice.cpp \
     main.cpp \
-    toolwnd.cpp \
 	httpDownload.cpp \
 	commonWidget.cpp \
 	iTunesDriverInstall.cpp \
-	SoftMgr.cpp
+	SoftMgr.cpp \
+	iTunesDriverDlg.cpp
 
 HEADERS += \
     RepairDriver.h \
     itunesservice.h \
-    toolwnd.h \
 	httpDownload.h \
 	commonWidget.h \
 	iTunesDriverInstall.h \
-	SoftMgr.h
+	SoftMgr.h \
+	iTunesDriverDlg.h
 
 FORMS += \
     RepairDriver.ui \
-    toolwnd.ui
+    toolwnd.ui \
+	iTunesDriverDlg.ui
 
 TRANSLATIONS += \
     tool_zh_CN.ts
 
-LIBS += -lAdvapi32
+LIBS += -lAdvapi32 -lShell32
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

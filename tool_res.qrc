@@ -7,5 +7,7 @@
         <file>res/installIOSDrv_ing.gif</file>
         <file>res/repairIcon.png</file>
         <file>res/tipiconpng.png</file>
+        <file>res/fix_icon.png</file>
+        <file>res/update_icon.png</file>
     </qresource>
 </RCC>

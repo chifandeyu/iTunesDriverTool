@@ -306,7 +306,7 @@ bool SoftMgr::GetSoftInfo()
 
 bool SoftMgr::uninstallApp(const wchar_t *wszName)
 {
-    GetSoftInfo();
+    //GetSoftInfo();
     if (!m_strError.isEmpty()) {
         qDebug() << m_strError;
     }
@@ -329,6 +329,13 @@ bool SoftMgr::uninstallApp(const wchar_t *wszName)
             if (index != -1) {
                 uninstall = QString("MsiExec.exe /x ") + uninstall.mid(index + QString("MsiExec.exe /I").length()) + QString(" /quiet");
             }
+            else {
+                index = uninstall.indexOf("MsiExec.exe /X", 0, Qt::CaseInsensitive);
+                if (index != -1) {
+                    uninstall += QString(" /quiet");
+                }
+            }
+            
             QProcess pp;
             pp.execute(uninstall);
             auto ss = QString(pp.readAllStandardError());

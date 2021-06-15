@@ -1,11 +1,12 @@
 #include "RepairDriver.h"
 #include <QGraphicsDropShadowEffect>
 #include "itunesservice.h"
-#include "toolwnd.h"
 #include "httpDownload.h"
 #include <QFile>
 #include <QJsonParseError>
 #include <QJsonObject>
+#include "iTunesDriverInstall.h"
+#include "iTunesDriverDlg.h"
 
 RepairDriver::RepairDriver(QWidget *parent)
     : commonWidget(parent)
@@ -19,12 +20,26 @@ RepairDriver::RepairDriver(QWidget *parent)
     ui.widget->setGraphicsEffect(pGraphics);
 
     ui.widget_appleUSBConnect->setVisible(false);
-    connect(ui.pushButton, &QPushButton::clicked, this, &RepairDriver::doRepair);
+    connect(ui.pushButton, &QPushButton::clicked, this, &RepairDriver::slotDoRepair);
     connect(ui.closeBtn, &QPushButton::clicked, [this]() {
         close();
     });
-    m_pDwonloadDlg = new ToolWnd(this);
+    connect(ui.m_pUpdateBtn, &QPushButton::clicked, [this]() {
+        checkAllDriver();
+    });
+    //m_pDwonloadDlg = new ToolWnd(this);
+    //m_pDwonloadDlg->show();
+    m_pInstaller = new iTunesDriverInstall();
+    m_pInstaller->start();
     getConfig();
+    m_iTunesDriverDlg = new iTunesDriverDlg(this);
+    //m_iTunesDriverDlg->show();
+
+    connect(m_pInstaller, &iTunesDriverInstall::sigStartInstall, this, &RepairDriver::slotStartInstall);
+    connect(m_pInstaller, &iTunesDriverInstall::sigInstalling, this, &RepairDriver::slotInstalling);
+    connect(m_pInstaller, &iTunesDriverInstall::sigInstallFinish, this, &RepairDriver::slotInstallFinish);
+    connect(m_pInstaller, &iTunesDriverInstall::sigUninstallDriver, this, &RepairDriver::slotUninstallDriver);
+    
 }
 
 RepairDriver::~RepairDriver()
@@ -37,34 +52,52 @@ RepairDriver::~RepairDriver()
 
 bool RepairDriver::checkAllDriver()
 {
+    bool bRet = true;
     bool is64 = iTunesServiceCheck::IsWow64();
     ui.widget_appleAppSupport64->setVisible(is64);
     ui.widget_appleMDSupoort64->setVisible(is64);
     ui.widget_appleMDSupoort32->setVisible(!is64);
-    bool appSupport32 = m_iTunesChecker->checkApplicationSupport32();
+    bool appSupport32 = m_iTunesChecker->checkAAS32();
+    if (!appSupport32) {
+        bRet = false;
+    }
     ui.label_appsupport32_install->setVisible(appSupport32);
     ui.label_appsupport32_no->setVisible(!appSupport32);
     if (is64) {
-        bool appSupport64 = m_iTunesChecker->checkApplicationSupport64();
+        bool appSupport64 = m_iTunesChecker->checkAAS64();
+        if (!appSupport64) {
+            bRet = false;
+        }
         ui.label_appsupport64_install->setVisible(appSupport64);
         ui.label_appsupport64_no->setVisible(!appSupport64);
-        bool MDSupport64 = m_iTunesChecker->checkMobileDeviceSupport64();
+        bool MDSupport64 = m_iTunesChecker->checkAMDS64();
+        if (!MDSupport64) {
+            bRet = false;
+        }
         ui.label_amds64_install->setVisible(MDSupport64);
         ui.label_amds64_no->setVisible(!MDSupport64);
     }
     else {
-        bool MDSupport32 = m_iTunesChecker->checkMobileDeviceSupport32();
+        bool MDSupport32 = m_iTunesChecker->checkAMDS32();
+        if (!MDSupport32) {
+            bRet = false;
+        }
         ui.label_amds_install->setVisible(MDSupport32);
         ui.label_amds_no->setVisible(!MDSupport32);
     }
     bool isRunning = m_iTunesChecker->servicIsRunning();
+    if (!isRunning) {
+        bRet = false;
+    }
     ui.label_have_start->setVisible(isRunning);
     ui.label_no_start->setVisible(!isRunning);
-    return true;
+    return bRet;
 }
 
 void RepairDriver::startDownloadDriver(const QString& fileUrl)
 {
+    //if (m_pDownloader->isDownload())
+    //    return;
     m_fileUrl = fileUrl;
     if (m_pDownloader) {
         m_pDownloader->cancel();
@@ -73,7 +106,7 @@ void RepairDriver::startDownloadDriver(const QString& fileUrl)
     }
     m_pDownloader = new httpDownload();
     connSigSlot();
-    m_pDownloader->download(fileUrl);
+    m_pDownloader->download(fileUrl, ".\\cache");
 }
 
 void RepairDriver::slotCancel()
@@ -85,7 +118,8 @@ void RepairDriver::slotCancel()
 
 void RepairDriver::slotProgress(qint64 bytesReceived, qint64 bytesTotal, const QString& strSpeed)
 {
-    m_pDwonloadDlg->setProgressValue(bytesReceived, bytesTotal, strSpeed);
+    //m_pDwonloadDlg->setProgressValue(bytesReceived, bytesTotal, strSpeed);
+    m_iTunesDriverDlg->setProgressValue(bytesReceived, bytesTotal, strSpeed);
 }
 
 void RepairDriver::slotErorr(const QString& errStr)
@@ -95,17 +129,70 @@ void RepairDriver::slotErorr(const QString& errStr)
 
 void RepairDriver::slotStartDownload()
 {
-    m_pDwonloadDlg->InitDownloadIosDrvFrame();
+    m_iTunesDriverDlg->onStartDownload();
 }
 
-void RepairDriver::slotFinished()
+void RepairDriver::slotDownloadFinished()
 {
+    doRepair();
+}
 
+void RepairDriver::slotInstallFinish()
+{
+    //check all
+    bool isOk = checkAllDriver();
+    if (isOk) {
+        m_iTunesDriverDlg->onInstallDrvSucc();
+    }
+    else {
+        m_iTunesDriverDlg->onInstallDrvFailed(QStringLiteral("iTunes Çý¶¯°²×°Ê§°Ü£¡"));
+    }
+}
+
+void RepairDriver::slotInstalling(QString packageName)
+{
+    //m_pDwonloadDlg->setInsatllFileName(packageName);
+    m_iTunesDriverDlg->setInsatllFileName(packageName);
+}
+
+void RepairDriver::slotStartInstall()
+{
+    m_iTunesDriverDlg->onStartInstallDrv();
+}
+
+void RepairDriver::slotUninstallDriver(bool bFinish)
+{
+    if (bFinish) {
+        //m_iTunesDriverDlg->InitInstallIosDrvSuccFrame();
+    }
+    else {
+        m_iTunesDriverDlg->onStartUninstallDrv();
+    }
+}
+
+void RepairDriver::slotDoRepair()
+{
+    doRepair();
+    m_iTunesDriverDlg->exec();
 }
 
 void RepairDriver::doRepair()
 {
-
+    if (m_pInstaller->isInstalling()) {
+        return;
+    }
+    bool has = false;
+    //check zip package and install
+    if (QFile::exists(m_zipPackage.strLocalPath)) {
+        QString md5 = iTunesServiceCheck::fileMd5(m_zipPackage.strLocalPath);
+        if (md5 == m_zipPackage.strHashCode) {
+            m_pInstaller->onInstallDriver(m_zipPackage.strLocalPath);
+            has = true;
+        }
+    }
+    if (!has) {
+        startDownloadDriver(m_zipPackage.strUrl);
+    }
 }
 
 void RepairDriver::getConfig()
@@ -154,7 +241,10 @@ void RepairDriver::getConfig()
         qInfo() << "Package url = " << info.strUrl;
         info.nFileSize = map["size"].toLongLong();
         qInfo() << "Package size = " << info.nFileSize;
+        info.strLocalPath = map["path"].toString();
+        qInfo() << "Package path = " << info.strLocalPath;
         bool is64 = iTunesServiceCheck::IsWow64();
+        QFileInfo fileInfo(info.strUrl);
         if (is64 && info.nOSBITS == 64) {
             m_zipPackage = info;
             break;
@@ -190,5 +280,5 @@ void RepairDriver::connSigSlot()
     connect(m_pDownloader, &httpDownload::sigErorr, this, &RepairDriver::slotErorr);
     connect(m_pDownloader, &httpDownload::sigStartDownload, this, &RepairDriver::slotStartDownload);
     connect(m_pDownloader, &httpDownload::sigProgress, this, &RepairDriver::slotProgress);
-    connect(m_pDownloader, &httpDownload::sigFinished, this, &RepairDriver::slotFinished);
+    connect(m_pDownloader, &httpDownload::sigFinished, this, &RepairDriver::slotDownloadFinished);
 }

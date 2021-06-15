@@ -7,6 +7,7 @@
 typedef struct zipPackageInfo
 {
     int nOSBITS;
+    QString strLocalPath;
     QString strUrl;
     QString strHashCode;
     long long nFileSize;         //文件大小
@@ -24,8 +25,10 @@ typedef struct _iTunesDriverEntity
 }iTunesDriverEntity, *PiTunesDriverEntity;
 
 class ToolWnd;
+class iTunesDriverDlg;
 class httpDownload;
 class iTunesServiceCheck;
+class iTunesDriverInstall;
 
 class RepairDriver : public commonWidget
 {
@@ -41,19 +44,25 @@ public slots:
     void slotProgress(qint64 bytesReceived, qint64 bytesTotal, const QString& strSpeed);
     void slotErorr(const QString& errStr);
     void slotStartDownload();
-    void slotFinished();
+    void slotDownloadFinished();
+    void slotInstallFinish();
+    void slotInstalling(QString packageName);
+    void slotStartInstall();
+    void slotUninstallDriver(bool bFinish);
+    void slotDoRepair();
 
-private slots:
-    void doRepair();
 private:
+    void doRepair();
     void getConfig();
     void connSigSlot();
 private:
     Ui::RepairDriver ui;
     QString m_fileUrl;
     QString m_configStr;
-    ToolWnd *m_pDwonloadDlg = nullptr;
+    //ToolWnd *m_pDwonloadDlg = nullptr;
+    iTunesDriverDlg* m_iTunesDriverDlg = nullptr;
     httpDownload* m_pDownloader = nullptr;
+    iTunesDriverInstall* m_pInstaller = nullptr;
     iTunesServiceCheck *m_iTunesChecker = nullptr;
     QMap<int, iTunesDriverEntity> m_entityMap;
     zipPackageInfo m_zipPackage;
