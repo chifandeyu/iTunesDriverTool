@@ -233,7 +233,7 @@ bool iTunesServiceCheck::checkMobileDeviceSupport32()
 bool iTunesServiceCheck::checkMobileDeviceSupport64()
 {
     wchar_t InstallDir[MAX_PATH];
-    bool hasInstall = checkReg("SOFTWARE\\Apple Inc.\\Apple Mobile Device Support", "InstallDir", InstallDir, true);
+    bool hasInstall = checkReg("SOFTWARE\\Apple Inc.\\Apple Mobile Device Support", "InstallDir", InstallDir);
     QString ret = QString::fromWCharArray(InstallDir);
     return hasInstall;
 }
