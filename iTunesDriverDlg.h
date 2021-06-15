@@ -53,10 +53,6 @@ signals:
 private slots:
     void on_closeBtn_clicked();
 
-public slots:
-
-    void slotCancel();
-
 private:
     void connSigSlot();
     void InitDownloadDrvFrame();

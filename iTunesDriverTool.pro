@@ -38,7 +38,6 @@ HEADERS += \
 
 FORMS += \
     RepairDriver.ui \
-    toolwnd.ui \
 	iTunesDriverDlg.ui
 
 TRANSLATIONS += \

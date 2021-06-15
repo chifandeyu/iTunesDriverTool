@@ -35,11 +35,8 @@ RepairDriver::RepairDriver(QWidget *parent)
     m_iTunesDriverDlg = new iTunesDriverDlg(this);
     //m_iTunesDriverDlg->show();
 
-    connect(m_pInstaller, &iTunesDriverInstall::sigStartInstall, this, &RepairDriver::slotStartInstall);
-    connect(m_pInstaller, &iTunesDriverInstall::sigInstalling, this, &RepairDriver::slotInstalling);
-    connect(m_pInstaller, &iTunesDriverInstall::sigInstallFinish, this, &RepairDriver::slotInstallFinish);
-    connect(m_pInstaller, &iTunesDriverInstall::sigUninstallDriver, this, &RepairDriver::slotUninstallDriver);
-    
+    m_pDownloader = new httpDownload();
+    connSigSlot();
 }
 
 RepairDriver::~RepairDriver()
@@ -47,6 +44,10 @@ RepairDriver::~RepairDriver()
     if (m_pDownloader) {
         m_pDownloader->deleteLater();
         m_pDownloader = nullptr;
+    }
+    if (m_pInstaller && m_pInstaller->isRunning()) {
+        m_pInstaller->quit();
+        m_pInstaller->wait();
     }
 }
 
@@ -96,16 +97,10 @@ bool RepairDriver::checkAllDriver()
 
 void RepairDriver::startDownloadDriver(const QString& fileUrl)
 {
-    //if (m_pDownloader->isDownload())
-    //    return;
+    if (m_pDownloader->isDownload())
+        return;
+    
     m_fileUrl = fileUrl;
-    if (m_pDownloader) {
-        m_pDownloader->cancel();
-        m_pDownloader->deleteLater();
-        m_pDownloader = nullptr;
-    }
-    m_pDownloader = new httpDownload();
-    connSigSlot();
     m_pDownloader->download(fileUrl, ".\\cache");
 }
 
@@ -119,12 +114,15 @@ void RepairDriver::slotCancel()
 void RepairDriver::slotProgress(qint64 bytesReceived, qint64 bytesTotal, const QString& strSpeed)
 {
     //m_pDwonloadDlg->setProgressValue(bytesReceived, bytesTotal, strSpeed);
+    if (bytesReceived == 0 && bytesReceived == 0)
+        return;
     m_iTunesDriverDlg->setProgressValue(bytesReceived, bytesTotal, strSpeed);
 }
 
-void RepairDriver::slotErorr(const QString& errStr)
+void RepairDriver::slotDownloadErorr(const QString& errStr)
 {
-
+    m_bDownloadFailed = true;
+    m_iTunesDriverDlg->onInstallDrvFailed(QStringLiteral("iTunesÇý¶¯ÏÂÔØÊ§°Ü£¡%1").arg(errStr));
 }
 
 void RepairDriver::slotStartDownload()
@@ -134,6 +132,8 @@ void RepairDriver::slotStartDownload()
 
 void RepairDriver::slotDownloadFinished()
 {
+    if (m_bDownloadFailed)
+        return;
     doRepair();
 }
 
@@ -172,6 +172,7 @@ void RepairDriver::slotUninstallDriver(bool bFinish)
 
 void RepairDriver::slotDoRepair()
 {
+    m_bDownloadFailed = false;
     doRepair();
     m_iTunesDriverDlg->exec();
 }
@@ -228,7 +229,7 @@ void RepairDriver::getConfig()
         return;
     }
     QJsonObject obj = document.object();
-    QVariantList list = obj["files"].toVariant().toList();
+    //QVariantList list = obj["files"].toVariant().toList();
     QVariantList zipPackList = obj["packages"].toVariant().toList();
     for (QVariant qv : zipPackList) {
         QVariantMap map = qv.toMap();
@@ -255,30 +256,37 @@ void RepairDriver::getConfig()
         }
         m_zipPackage = info;
     }
-    for (int i = 0; i < list.count(); i++)
-    {
-        QVariantMap map = list[i].toMap();
-        iTunesDriverEntity entity;
-        entity.Index = map["Index"].toInt();
-        qInfo() << "Index = " << entity.Index;
-        entity.strHashCode = map["md5"].toString();
-        qInfo() << "md5 = " << entity.strHashCode;
-        entity.nOSBITS = map["OSBITS"].toInt();
-        qInfo() << "OSBITS = " << entity.nOSBITS;
-        entity.strIosDriverName = map["fileName"].toString();
-        qInfo() << "fileName = " << entity.strIosDriverName;
-        entity.strIosUrl = map["url"].toString();
-        qInfo() << "url = " << entity.strIosUrl;
-        entity.nFileSize = map["size"].toLongLong();
-        qInfo() << "size = " << entity.nFileSize;
-        m_entityMap.insert(entity.Index, entity);
-    }
+    //for (int i = 0; i < list.count(); i++)
+    //{
+    //    QVariantMap map = list[i].toMap();
+    //    iTunesDriverEntity entity;
+    //    entity.Index = map["Index"].toInt();
+    //    qInfo() << "Index = " << entity.Index;
+    //    entity.strHashCode = map["md5"].toString();
+    //    qInfo() << "md5 = " << entity.strHashCode;
+    //    entity.nOSBITS = map["OSBITS"].toInt();
+    //    qInfo() << "OSBITS = " << entity.nOSBITS;
+    //    entity.strIosDriverName = map["fileName"].toString();
+    //    qInfo() << "fileName = " << entity.strIosDriverName;
+    //    entity.strIosUrl = map["url"].toString();
+    //    qInfo() << "url = " << entity.strIosUrl;
+    //    entity.nFileSize = map["size"].toLongLong();
+    //    qInfo() << "size = " << entity.nFileSize;
+    //    m_entityMap.insert(entity.Index, entity);
+    //}
 }
 
 void RepairDriver::connSigSlot()
 {
-    connect(m_pDownloader, &httpDownload::sigErorr, this, &RepairDriver::slotErorr);
+    connect(m_pDownloader, &httpDownload::sigErorr, this, &RepairDriver::slotDownloadErorr);
     connect(m_pDownloader, &httpDownload::sigStartDownload, this, &RepairDriver::slotStartDownload);
     connect(m_pDownloader, &httpDownload::sigProgress, this, &RepairDriver::slotProgress);
     connect(m_pDownloader, &httpDownload::sigFinished, this, &RepairDriver::slotDownloadFinished);
+
+    connect(m_pInstaller, &iTunesDriverInstall::sigStartInstall, this, &RepairDriver::slotStartInstall);
+    connect(m_pInstaller, &iTunesDriverInstall::sigInstalling, this, &RepairDriver::slotInstalling);
+    connect(m_pInstaller, &iTunesDriverInstall::sigInstallFinish, this, &RepairDriver::slotInstallFinish);
+    connect(m_pInstaller, &iTunesDriverInstall::sigUninstallDriver, this, &RepairDriver::slotUninstallDriver);
+
+    connect(m_iTunesDriverDlg, &iTunesDriverDlg::sigCancel, this, &RepairDriver::slotCancel);
 }

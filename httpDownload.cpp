@@ -68,8 +68,10 @@ void httpDownload::cancel()
     }
     if (m_pFile) {
         m_pFile->close();
+        m_pFile->remove();
         m_pFile = nullptr;
     }
+    m_isDownloading = false;
     emit sigCancel();
     qDebug() << "==== httpcancel";
 }

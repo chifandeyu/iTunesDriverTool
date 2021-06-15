@@ -20,6 +20,7 @@ iTunesDriverDlg::iTunesDriverDlg(QWidget *parent)
     ui.widget->setGraphicsEffect(pGraphics);
 
     m_pIOSMovie = new QMovie(QString::fromUtf8(":/res/installIOSDrv_ing.gif"), "", this);
+    connSigSlot();
 }
 
 iTunesDriverDlg::~iTunesDriverDlg()
@@ -122,12 +123,7 @@ void iTunesDriverDlg::on_closeBtn_clicked()
     close();
 }
 
-void iTunesDriverDlg::slotCancel()
-{
-
-}
-
 void iTunesDriverDlg::connSigSlot()
 {
-
+    connect(ui.m_CancelBtn, &QPushButton::clicked, this, &iTunesDriverDlg::on_closeBtn_clicked);
 }

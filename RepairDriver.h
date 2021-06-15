@@ -42,7 +42,7 @@ public:
 public slots:
     void slotCancel();
     void slotProgress(qint64 bytesReceived, qint64 bytesTotal, const QString& strSpeed);
-    void slotErorr(const QString& errStr);
+    void slotDownloadErorr(const QString& errStr);
     void slotStartDownload();
     void slotDownloadFinished();
     void slotInstallFinish();
@@ -64,6 +64,7 @@ private:
     httpDownload* m_pDownloader = nullptr;
     iTunesDriverInstall* m_pInstaller = nullptr;
     iTunesServiceCheck *m_iTunesChecker = nullptr;
-    QMap<int, iTunesDriverEntity> m_entityMap;
+    //QMap<int, iTunesDriverEntity> m_entityMap;
     zipPackageInfo m_zipPackage;
+    bool m_bDownloadFailed = false;
 };

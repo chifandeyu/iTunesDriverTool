@@ -69,6 +69,9 @@
     <ClCompile Include="httpDownload.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="iTunesDriverDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="iTunesDriverInstall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -76,9 +79,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="iTunesDriverDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -95,13 +95,13 @@
     <QtMoc Include="httpDownload.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="iTunesDriverDlg.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
     <QtMoc Include="iTunesDriverInstall.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="itunesservice.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="iTunesDriverDlg.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -130,6 +130,9 @@
     <None Include="res\dialog_close.png">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="res\fix_icon.png">
+      <Filter>Resource Files</Filter>
+    </None>
     <None Include="res\installDrv_done.png">
       <Filter>Resource Files</Filter>
     </None>
@@ -151,5 +154,8 @@
     <QtRcc Include="tool_res.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
+    <None Include="res\update_icon.png">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
