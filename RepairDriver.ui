@@ -89,12 +89,21 @@
          </property>
          <item>
           <widget class="QLabel" name="label_4">
+           <property name="font">
+            <font>
+             <family>Microsoft YaHei UI</family>
+             <pointsize>12</pointsize>
+             <weight>9</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
            <property name="styleSheet">
             <string notr="true">color: rgb(48, 48, 48);
 font: 75 12pt &quot;Microsoft YaHei UI&quot;;</string>
            </property>
            <property name="text">
-            <string>LJtool驱动组件修复</string>
+            <string>LJtools驱动组件修复</string>
            </property>
           </widget>
          </item>
