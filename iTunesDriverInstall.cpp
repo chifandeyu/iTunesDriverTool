@@ -115,7 +115,6 @@ void iTunesDriverInstall::slotInstall(QString zipPackage)
         unInstallDriver();
     }
 
-    bool is64 = iTunesServiceCheck::IsWow64();
     QString strAASPath;
     QString strAAS64Path;
     QString strAMDSPath;
@@ -128,6 +127,7 @@ void iTunesDriverInstall::slotInstall(QString zipPackage)
 void iTunesDriverInstall::run()
 {
     int ret = exec();
+    qInfo() << "iTunesDriverInstall thread exit " << ret;
 }
 
 void iTunesDriverInstall::installIosDriver(

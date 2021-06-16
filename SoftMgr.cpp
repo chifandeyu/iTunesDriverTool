@@ -313,12 +313,12 @@ bool SoftMgr::uninstallApp(const wchar_t *wszName)
     qDebug() << m_vecSoftInfo.size();
     for (int i = 0; i < m_vecSoftInfo.size(); i++)
     {
-        qDebug() << QString("%1 %2 %3 %4 %5")
-            .arg(m_vecSoftInfo[i].m_strSoftName)
-            .arg(m_vecSoftInfo[i].m_strSoftVersion)
-            .arg(m_vecSoftInfo[i].m_strPublisher)
-            .arg(m_vecSoftInfo[i].m_strInstallLocation)
-            .arg(m_vecSoftInfo[i].m_strInstallDate);
+        //qDebug() << QString("%1 %2 %3 %4 %5")
+        //    .arg(m_vecSoftInfo[i].m_strSoftName)
+        //    .arg(m_vecSoftInfo[i].m_strSoftVersion)
+        //    .arg(m_vecSoftInfo[i].m_strPublisher)
+        //    .arg(m_vecSoftInfo[i].m_strInstallLocation)
+        //    .arg(m_vecSoftInfo[i].m_strInstallDate);
 
         DWORD dwSize = wcslen(wszName);
         QString name = QString::fromUtf16(reinterpret_cast<const ushort *>(wszName), dwSize);
@@ -337,6 +337,7 @@ bool SoftMgr::uninstallApp(const wchar_t *wszName)
             }
             
             QProcess pp;
+            qInfo() << "run " << uninstall;
             pp.execute(uninstall);
             auto ss = QString(pp.readAllStandardError());
             if (!ss.isEmpty()) {

@@ -35,7 +35,7 @@
       <string notr="true">QWidget#widget
 {
 	background-color: rgb(255, 255, 255);
-    border-raduis: 4px;
+    /*border-radius: 4px;*/
 }</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
@@ -84,8 +84,9 @@
          <item>
           <widget class="QLabel" name="titleLab">
            <property name="styleSheet">
-            <string notr="true">QWidget#titleLab{
-	color: rgb(48, 48, 48);
+            <string notr="true">QWidget#titleLab
+{
+    color: rgb(48, 48, 48);
     font: 14pt &quot;Microsoft YaHei UI&quot;;
 }
 </string>
@@ -538,9 +539,6 @@ color: rgb(151, 151, 151);</string>
          </widget>
         </widget>
         <widget class="QWidget" name="MMInstallDrvFailedPage">
-         <property name="styleSheet">
-          <string notr="true">font: 12pt &quot;Microsoft YaHei UI&quot;;\ncolor: rgb(51, 51, 51);</string>
-         </property>
          <widget class="QWidget" name="layoutWidget">
           <property name="geometry">
            <rect>
@@ -605,9 +603,6 @@ color: rgb(151, 151, 151);</string>
          </widget>
         </widget>
         <widget class="QWidget" name="UninstallDrvPage">
-         <property name="styleSheet">
-          <string notr="true">font: 12pt &quot;Microsoft YaHei UI&quot;;\ncolor: rgb(51, 51, 51);</string>
-         </property>
          <widget class="QWidget" name="layoutWidget">
           <property name="geometry">
            <rect>

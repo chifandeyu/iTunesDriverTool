@@ -92,6 +92,9 @@ bool RepairDriver::checkAllDriver()
     }
     ui.label_have_start->setVisible(isRunning);
     ui.label_no_start->setVisible(!isRunning);
+
+    QString str = bRet ? QStringLiteral("重装驱动") : QStringLiteral("一键修复");
+    ui.pushButton->setText(str);
     return bRet;
 }
 

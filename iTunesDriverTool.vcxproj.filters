@@ -106,12 +106,30 @@
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <CustomBuild Include="debug\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
     <CustomBuild Include="release\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
+    
+    
+    
+    
   </ItemGroup>
   <ItemGroup>
     <None Include="tool_zh_CN.ts">
@@ -155,6 +173,9 @@
       <Filter>Resource Files</Filter>
     </QtRcc>
     <None Include="res\update_icon.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\warning.png">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
