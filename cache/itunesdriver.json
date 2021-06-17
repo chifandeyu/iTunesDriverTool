@@ -2,17 +2,17 @@
 	"packages": [
 	    {
 			"OSBITS": 32,
-			"md5": "75653A68119E50AFD1D819BC5631C04C",
+			"md5": "222FC4C7BD21EA229B9DC4498C3239D1",
 			"path": ".\\cache\\iTunesOL_Lite_32_12.10.0.7.zip",
             "url": "http://10.238.7.154/iTunesOL_Lite_32_12.10.0.7.zip",
-            "size": 48848896
+            "size": 58330670
 		},
 		{
 			"OSBITS": 64,
-			"md5": "974017604BF0850000F9CA4C360293A9",
+			"md5": "350A4F04487ED0F2BEAD4396566297F9",
 			"path": ".\\cache\\iTunesOL_Lite_64_12.10.0.7.zip",
             "url": "http://10.238.7.154/iTunesOL_Lite_64_12.10.0.7.zip",
-            "size": 115602942
+            "size": 114387563
 		}
 	],
 	"version": "13.0.0.38 1190.9.1.1"

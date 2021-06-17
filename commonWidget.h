@@ -26,7 +26,7 @@ protected:
             mouse_move_len = event->globalPos() - pos();
         }
     }
-    void mouseReleaseEvent(QMouseEvent* event) {
+    void mouseReleaseEvent(QMouseEvent* /*event*/) {
         mouse_is_press = false;
     }
 

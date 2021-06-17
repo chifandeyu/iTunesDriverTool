@@ -4,7 +4,7 @@
 #include "ui_RepairDriver.h"
 #include "commonWidget.h"
 
-typedef struct zipPackageInfo
+struct zipPackageInfo
 {
     int nOSBITS;
     QString strLocalPath;
@@ -50,6 +50,8 @@ public slots:
     void slotStartInstall();
     void slotUninstallDriver(bool bFinish);
     void slotDoRepair();
+protected:
+    bool nativeEvent(const QByteArray& eventType, void* message, long* result);
 
 private:
     void doRepair();

@@ -7,6 +7,7 @@
 #include <QJsonObject>
 #include "iTunesDriverInstall.h"
 #include "iTunesDriverDlg.h"
+#include <windows.h>
 
 RepairDriver::RepairDriver(QWidget *parent)
     : commonWidget(parent)
@@ -178,6 +179,27 @@ void RepairDriver::slotDoRepair()
     m_bDownloadFailed = false;
     doRepair();
     m_iTunesDriverDlg->exec();
+}
+
+bool RepairDriver::nativeEvent(const QByteArray& eventType, void* message, long* result)
+{
+    MSG* msg = reinterpret_cast<MSG*>(message);
+    if (msg->message == WM_COPYDATA) {
+        // extract the string from lParam
+        COPYDATASTRUCT* data = (COPYDATASTRUCT*)msg->lParam;
+        if (data) {
+            char* buf = new char[64];
+            memset(buf, 0, 64);
+            memcpy(buf, data->lpData, data->cbData);
+            if (strcmp(buf, "activeWnd") == 0)
+            {
+                activateWindow();
+            }
+            delete[]buf;
+            return true;
+        }
+    }
+    return QWidget::nativeEvent(eventType, message, result);
 }
 
 void RepairDriver::doRepair()

@@ -6,8 +6,13 @@
 #include <QSharedMemory>
 #include <QSystemSemaphore>
 #include <QDebug>
+#ifdef Q_OS_WIN32
+#include <Windows.h>
+#endif
 
-const std::string fromLJtools = "ljtools";
+const std::string autoCheck = "auto";
+const char* activeWnd = "activeWnd";
+LPCWSTR mainwnd = L"RepairDriver";
 
 int main(int argc, char *argv[])
 {
@@ -41,6 +46,14 @@ int main(int argc, char *argv[])
     bool isRunning = false;
     if (unimem.attach()) {
         isRunning = true;
+        HWND receiveWindow = ::FindWindow(NULL, mainwnd);
+        if (receiveWindow)
+        {
+            COPYDATASTRUCT copyData = { 0 };
+            copyData.lpData = (PVOID)activeWnd;
+            copyData.cbData = strlen(activeWnd) + 1;
+            ::SendMessage(receiveWindow, WM_COPYDATA, NULL, (LPARAM)&copyData);
+        }
     }
     else {
         unimem.create(1);
@@ -54,25 +67,25 @@ int main(int argc, char *argv[])
         exit(0);
     }
 #pragma endregion singleApp
-
+    
     RepairDriver rd;
     //auto check all driver
     bool isOk = rd.checkAllDriver();
     
     //start from ljtools
-    bool isFromLJTools = false;
+    bool isAutoCheck = false;
     if (argc > 1) {
         std::string param = argv[1];
         std::transform(param.begin(), param.end(), param.begin(), tolower);
-        if (!param.empty() && fromLJtools == param) {
-            isFromLJTools = true;
+        if (!param.empty() && autoCheck == param) {
+            isAutoCheck = true;
             if (isOk) {
                 return 0;
             }
         }
     }
     rd.show();
-    if (!isOk && isFromLJTools) {
+    if (!isOk && isAutoCheck) {
         rd.slotDoRepair();
     }
     return a.exec();
