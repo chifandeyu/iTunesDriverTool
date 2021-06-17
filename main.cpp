@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication a(argc, argv);
-
+    a.setWindowIcon(QIcon(":/res/itunes_tool.ico"));
 #pragma region singleApp
     //信号量的意义，把操作共享内存的代码锁住。因为有可能同时点击2次APP, 防止并发
     QSystemSemaphore sema("LJ_iTunesDriver_tool key", 1, QSystemSemaphore::Open);

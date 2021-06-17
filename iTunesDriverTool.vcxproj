@@ -268,6 +268,15 @@
     <None Include="res\update_icon.png" />
     <None Include="res\warning.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="iTunesDriverTool.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\itunes_tools.ico" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />

@@ -10,5 +10,6 @@
         <file>res/fix_icon.png</file>
         <file>res/update_icon.png</file>
         <file>res/warning.png</file>
+        <file>res/itunes_tool.ico</file>
     </qresource>
 </RCC>
