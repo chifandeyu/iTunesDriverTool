@@ -14,7 +14,8 @@ public:
     iTunesDriverInstall(QObject *parent = nullptr);
     ~iTunesDriverInstall();
     static void GetIosDriverPaths(QString& strAASPath, QString& strAAS64Path,
-        QString& strAMDSPath, QString& strAMDS64Path);
+        QString& strAMDSPath, QString& strAMDS64Path, 
+        QString& BonjourPath, QString& Bonjour64Path);
     bool unZipPackage(const QString& filePath);
     void unInstallDriver();
     void onInstallDriver(QString zipPackage);
@@ -42,7 +43,9 @@ private:
         const QString& strAASPath,
         const QString& strAAS64Path,
         const QString& strAMDSPath,
-        const QString& strAMDS64Path);
+        const QString& strAMDS64Path,
+        const QString& BonjourPath, 
+        const QString& Bonjour64Path);
 private:
     bool m_isInstalling = false;
 };

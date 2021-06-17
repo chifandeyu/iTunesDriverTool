@@ -23,7 +23,9 @@ void iTunesDriverInstall::GetIosDriverPaths(
     QString& strAASPath, 
     QString& strAAS64Path, 
     QString& strAMDSPath,
-    QString& strAMDS64Path)
+    QString& strAMDS64Path,
+    QString& BonjourPath,
+    QString& Bonjour64Path)
 {
     strAASPath = QString(strCachePath + "\\AppleApplicationSupport.msi");
     QFileInfo aasInfo(strAASPath);
@@ -48,6 +50,18 @@ void iTunesDriverInstall::GetIosDriverPaths(
     if (AMDS64.exists()) {
         strAMDS64Path = AMDS64.absoluteFilePath();
         strAMDS64Path.replace("/", "\\");
+    }
+    BonjourPath = QString(strCachePath + "\\Bonjour.msi");
+    QFileInfo Bonjour(BonjourPath);
+    if (Bonjour.exists()) {
+        BonjourPath = Bonjour.absoluteFilePath();
+        BonjourPath.replace("/", "\\");
+    }
+    Bonjour64Path = QString(strCachePath + "\\Bonjour64.msi");
+    QFileInfo Bonjour64(Bonjour64Path);
+    if (Bonjour64.exists()) {
+        Bonjour64Path = Bonjour64.absoluteFilePath();
+        Bonjour64Path.replace("/", "\\");
     }
 }
 
@@ -118,8 +132,11 @@ void iTunesDriverInstall::slotInstall(QString zipPackage)
     QString strAAS64Path;
     QString strAMDSPath;
     QString strAMDS64Path;
-    GetIosDriverPaths(strAASPath, strAAS64Path, strAMDSPath, strAMDS64Path);
-    installIosDriver(strAASPath, strAAS64Path, strAMDSPath, strAMDS64Path);
+    QString BonjourPath;
+    QString Bonjour64Path;
+
+    GetIosDriverPaths(strAASPath, strAAS64Path, strAMDSPath, strAMDS64Path, BonjourPath, Bonjour64Path);
+    installIosDriver(strAASPath, strAAS64Path, strAMDSPath, strAMDS64Path, BonjourPath, Bonjour64Path);
     m_isInstalling = false;
 }
 
@@ -133,7 +150,9 @@ void iTunesDriverInstall::installIosDriver(
     const QString& strAASPath, 
     const QString& strAAS64Path,
     const QString& strAMDSPath,
-    const QString& strAMDS64Path)
+    const QString& strAMDS64Path, 
+    const QString& BonjourPath, 
+    const QString& Bonjour64Path)
 {
     //////////////////////////////////////////////////////////////////////////
     qDebug() << "install ios driver entry...";
@@ -184,6 +203,22 @@ void iTunesDriverInstall::installIosDriver(
             qDebug() << QString("install AppleApplicationSupport64.msi failed, result = %1 ret = %2")
                 .arg(result).arg(ret);
         }
+        /////////////////Bonjour64//////////////
+        ShExecInfo.lpFile = (LPCWSTR)reinterpret_cast<const wchar_t*>(Bonjour64Path.utf16());
+        emit sigInstalling("Bonjour64");
+        result = ShellExecuteEx(&ShExecInfo);
+        ret = WaitForSingleObject(ShExecInfo.hProcess, INFINITE);
+        if (result == TRUE && ret == 0)
+        {
+            //strcpy_s(pLocalInstallAAS64ConnMsgWparam->err_msg, "AppleApplicationSupport64.msi安装成功");
+            qDebug() << "install Bonjour64.msi success";
+        }
+        else
+        {
+            //strcpy_s(pLocalInstallAAS64ConnMsgWparam->err_msg, "AppleApplicationSupport64.msi安装失败");
+            qDebug() << QString("install Bonjour64.msi failed, result = %1 ret = %2")
+                .arg(result).arg(ret);
+        }
         /////////////////AMDS64/////////////////
         ShExecInfo.lpFile = (LPCWSTR)reinterpret_cast<const wchar_t*>(strAMDS64Path.utf16());
         emit sigInstalling("AppleMobileDeviceSupport64");
@@ -203,6 +238,22 @@ void iTunesDriverInstall::installIosDriver(
     }
     else
     {
+        /////////////////Bonjour64//////////////
+        ShExecInfo.lpFile = (LPCWSTR)reinterpret_cast<const wchar_t*>(BonjourPath.utf16());
+        emit sigInstalling("Bonjour");
+        result = ShellExecuteEx(&ShExecInfo);
+        ret = WaitForSingleObject(ShExecInfo.hProcess, INFINITE);
+        if (result == TRUE && ret == 0)
+        {
+            //strcpy_s(pLocalInstallAAS64ConnMsgWparam->err_msg, "AppleApplicationSupport64.msi安装成功");
+            qDebug() << "install Bonjour.msi success";
+        }
+        else
+        {
+            //strcpy_s(pLocalInstallAAS64ConnMsgWparam->err_msg, "AppleApplicationSupport64.msi安装失败");
+            qDebug() << QString("install Bonjour.msi failed, result = %1 ret = %2")
+                .arg(result).arg(ret);
+        }
         /////////////////AMDS/////////////////
         ShExecInfo.lpFile = (LPCWSTR)reinterpret_cast<const wchar_t*>(strAMDSPath.utf16());
         emit sigInstalling("AppleMobileDeviceSupport");

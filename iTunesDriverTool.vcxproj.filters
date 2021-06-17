@@ -106,30 +106,12 @@
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <CustomBuild Include="debug\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
     <CustomBuild Include="release\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
-    
-    
-    
-    
   </ItemGroup>
   <ItemGroup>
     <None Include="tool_zh_CN.ts">
@@ -157,6 +139,9 @@
     <None Include="res\installIOSDrv_ing.gif">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="res\itunes_tool.ico">
+      <Filter>Resource Files</Filter>
+    </None>
     <None Include="res\progressbardriverdowngbg.png">
       <Filter>Resource Files</Filter>
     </None>
@@ -178,5 +163,13 @@
     <None Include="res\warning.png">
       <Filter>Resource Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource1.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="iTunesDriverTool1.rc" />
   </ItemGroup>
 </Project>

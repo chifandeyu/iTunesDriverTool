@@ -259,6 +259,7 @@
     <None Include="res\fix_icon.png" />
     <None Include="res\installDrv_done.png" />
     <None Include="res\installIOSDrv_ing.gif" />
+    <None Include="res\itunes_tool.ico" />
     <None Include="res\progressbardriverdowngbg.png" />
     <None Include="res\progressbardriverdowngfront.png" />
     <None Include="res\repairIcon.png" />
