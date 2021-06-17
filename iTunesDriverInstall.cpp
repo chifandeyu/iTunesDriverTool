@@ -25,7 +25,6 @@ void iTunesDriverInstall::GetIosDriverPaths(
     QString& strAMDSPath,
     QString& strAMDS64Path)
 {
-    QString strCachePath = ".\\cache";
     strAASPath = QString(strCachePath + "\\AppleApplicationSupport.msi");
     QFileInfo aasInfo(strAASPath);
     if (aasInfo.exists()) {

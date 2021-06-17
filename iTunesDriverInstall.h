@@ -4,6 +4,8 @@
 #include <QFileInfo>
 #include <QThread>
 
+const QString strCachePath = ".\\cache";
+
 class iTunesDriverInstall : public QThread
 {
     Q_OBJECT
@@ -11,7 +13,7 @@ class iTunesDriverInstall : public QThread
 public:
     iTunesDriverInstall(QObject *parent = nullptr);
     ~iTunesDriverInstall();
-    void GetIosDriverPaths(QString& strAASPath, QString& strAAS64Path,
+    static void GetIosDriverPaths(QString& strAASPath, QString& strAAS64Path,
         QString& strAMDSPath, QString& strAMDS64Path);
     bool unZipPackage(const QString& filePath);
     void unInstallDriver();

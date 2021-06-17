@@ -147,6 +147,12 @@ void RepairDriver::slotInstallFinish()
     bool isOk = checkAllDriver();
     if (isOk) {
         m_iTunesDriverDlg->onInstallDrvSucc();
+        QString strAASPath, strAAS64Path, strAMDSPath, strAMDS64Path;
+        iTunesDriverInstall::GetIosDriverPaths(strAASPath, strAAS64Path, strAMDSPath, strAMDS64Path);
+        QFile::remove(strAASPath);
+        QFile::remove(strAAS64Path);
+        QFile::remove(strAMDSPath);
+        QFile::remove(strAMDS64Path);
     }
     else {
         m_iTunesDriverDlg->onInstallDrvFailed(QStringLiteral("iTunes Çý¶¯°²×°Ê§°Ü£¡"));
