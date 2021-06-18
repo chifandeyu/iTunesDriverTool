@@ -4,17 +4,20 @@
 
 #define UNIT_KB (1024)           //KB
 #define UNIT_MB (1024*1024)      //MB
-#define UNIT_GB (1024*1024*1024) //GB
 
 httpDownload::httpDownload(QObject *parent)
-    : QObject(parent)
+    : QThread(parent)
 {
-    m_pManager = new QNetworkAccessManager(this);
 }
 
 httpDownload::~httpDownload()
 {
     cancel();
+}
+
+void httpDownload::run()
+{
+    onDownload();
 }
 
 bool httpDownload::download(const QString& strUrl, const QString& dir)
@@ -33,126 +36,49 @@ bool httpDownload::download(const QString& strUrl, const QString& dir)
         qDebug() << "==== download failed, please check adress!!!" << strUrl;
         return false;
     }
-    else {
-        QDir qdir(dir);
-        if (!qdir.exists()) {
-            qdir.mkdir(dir);
-        }
-        fileName = dir + "\\" + fileName;
-        //建立文件
-        m_pFile = new QFile(fileName);
-        
-        //如果文件没有打开的情况
-        if (!m_pFile->open((QIODevice::WriteOnly))) {
-            delete m_pFile;
-            m_pFile = nullptr;
-            return false;
-        }
 
-        //执行网络请求函数
-        startRequest(m_url);
+    if (m_bRunning == true) return true;
+    m_cancel = false;
+    clear();
 
-        //开始下载
-        emit sigStartDownload();
-        qDebug() << "==== start download" << strUrl;
+    QDir qdir(dir);
+    if (!qdir.exists()) {
+        qdir.mkdir(dir);
     }
-    return true;
-    return true;
-}
+    fileName = dir + "\\" + fileName;
 
-void httpDownload::cancel()
-{
-    if (m_pReply) {
-        m_pReply->deleteLater();
-        m_pReply = nullptr;
-    }
-    if (m_pFile) {
-        m_pFile->close();
-        m_pFile->remove();
-        m_pFile = nullptr;
-    }
-    m_isDownloading = false;
-    emit sigCancel();
-    qDebug() << "==== httpcancel";
-}
+    m_strDownloadUrl = strUrl.toStdString();
+    m_strLocalFilePath = fileName.toLocal8Bit().toStdString();
 
-void httpDownload::pause()
-{
-
-}
-
-QString httpDownload::transformUnit(qint64 bytes, bool isSpeed)
-{
-    QString strUnit = "B";
-    if (bytes <= 0)
-        bytes = 0;
-    else if (bytes < UNIT_KB)
+    // 初始化libcurl
+    m_pCurl = curl_easy_init();
+    if (m_pCurl == NULL)
     {
+        return false;
     }
-    else if (bytes < UNIT_MB)
+
+    // 设置libcurl的选项
+    setOption();
+
+    // 创建文件
+    m_pFile = fopen(m_strLocalFilePath.c_str(), "wb");
+    if (m_pFile == NULL)
     {
-        bytes /= UNIT_KB;
-        strUnit = "KB";
-    }
-    else if (bytes < UNIT_GB)
-    {
-        bytes /= UNIT_MB;
-        strUnit = "MB";
-    }
-    else if (bytes > UNIT_GB)
-    {
-        bytes /= UNIT_GB;
-        strUnit = "GB";
+        return false;
     }
 
-    if (isSpeed)
-    {
-        strUnit += "/S";
-    }
-
-    return QString("%1%2").arg(bytes).arg(strUnit);
-}
-
-void httpDownload::startRequest(QUrl url)
-{
-    m_isDownloading = true;
-    //get发送一个网络请求 返回网络应答
-    m_pReply = m_pManager->get(QNetworkRequest(url));
-
-    //每当有新的数据要读取时 发射信号
-    connect(m_pReply, &QNetworkReply::readyRead, this, &httpDownload::httpReadyRead);
-
-    //每当有下载进度更新时 发射信号 更新进度条和文本窗
-    connect(m_pReply, &QNetworkReply::downloadProgress, this, &httpDownload::updateProgress);
-
-    //应答处理结束时会发射finished信号
-    connect(m_pReply, &QNetworkReply::finished, this, &httpDownload::httpFinished);
-
-    connect(m_pReply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(httpError(QNetworkReply::NetworkError)));
-    //时间计时开始
+    start();
     time.start();
+    return true;
 }
 
-void httpDownload::httpReadyRead()
+bool httpDownload::cancel()
 {
-    if (m_pFile) {
-        m_pFile->write(m_pReply->readAll());
-    }
-}
-
-void httpDownload::httpFinished()
-{
-    qDebug() << "==== httpFinished";
-    if (m_pFile) {
-        m_pFile->close();
-        delete m_pFile;
-        m_pFile = nullptr;
-    }
-
-    m_pReply->deleteLater();
-    m_pReply = nullptr;
-    emit sigFinished();
-    m_isDownloading = false;
+    m_cancel = true;
+    m_bRunning = false;
+    quit();
+    wait();
+    return true;
 }
 
 void httpDownload::updateProgress(qint64 bytesReceived, qint64 bytesTotal)
@@ -177,10 +103,144 @@ void httpDownload::updateProgress(qint64 bytesReceived, qint64 bytesTotal)
     emit sigProgress(bytesReceived, bytesTotal, strSpeed);
 }
 
-void httpDownload::httpError(QNetworkReply::NetworkError)
+size_t httpDownload::handleWrite(void* buffer, size_t size, size_t nmemb, void* userp)
 {
-    m_isDownloading = false;
-    QString errStr = m_pReply->errorString();
-    emit sigErorr(errStr);
-    qDebug() << "==== httpError" << errStr;
+    httpDownload* pDownloader = (httpDownload*)userp;
+    if (pDownloader)
+    {
+        return pDownloader->onWrite(buffer, size, nmemb);
+    }
+    return 0;
+}
+
+size_t httpDownload::handleProgress(void* buffer, double dltotal, double dlnow, double ultotal, double ulnow)
+{
+    httpDownload* pDownloader = (httpDownload*)buffer;
+    if (pDownloader)
+    {
+        if (pDownloader->m_cancel)
+        {
+            return -1;
+        }
+        //pDownloader->onProgress(dltotal, dlnow);
+        pDownloader->updateProgress(dlnow, dltotal);
+    }
+    return 0;
+}
+
+size_t httpDownload::onWrite(void* buffer, size_t size, size_t nmemb)
+{
+    size_t return_size = fwrite(buffer, size, nmemb, m_pFile);
+    //qDebug() << (char*)buffer;
+    return return_size;
+}
+
+size_t httpDownload::onProgress(const double& dltotal, const double& dlnow)
+{
+    qDebug()<<"dlnow:"<< dlnow<<"dltotal:"<<dltotal<<"dlnow:"<< (dlnow * 100.0 / dltotal);
+    return 0;
+}
+
+void httpDownload::onDownload()
+{
+    m_bRunning = true;
+    emit sigStartDownload();
+    qDebug() << "==== start download";
+    // 执行下载
+    CURLcode return_code = CURLE_OK;
+    return_code = curl_easy_perform(m_pCurl);
+    bool isSuccess = true;
+    // 关闭文件
+    if (m_pFile)
+    {
+        fclose(m_pFile);
+        m_pFile = NULL;
+    }
+    if (CURLE_ABORTED_BY_CALLBACK == return_code) {
+        emit sigCancel();
+        qDebug() << "==== httpcancel";
+        isSuccess = false;
+    }
+    // 下载失败
+    if (return_code != CURLE_OK)
+    {
+        QString errStr = curl_easy_strerror(return_code);
+        emit sigErorr(errStr);
+        isSuccess = false;
+    }
+
+    // 获取状态码
+    int response_code = 0;
+    curl_easy_getinfo(m_pCurl, CURLINFO_RESPONSE_CODE, &response_code);
+    if (response_code != 200)
+    {
+        qDebug() << "http code: " << response_code;
+        emit sigErorr(QString("http error code:").arg(response_code));
+        isSuccess = false;
+    }
+
+    {
+        curl_easy_cleanup(m_pCurl);
+        m_pCurl = NULL;
+        curl_global_cleanup();
+    }
+    m_bRunning = false;
+    if (isSuccess)
+    {
+        emit sigFinished();
+        qDebug() << "==== httpFinished";
+    }
+}
+
+void httpDownload::setOption()
+{
+    // 远程URL，支持 http, https, ftp
+    curl_easy_setopt(m_pCurl, CURLOPT_URL, m_strDownloadUrl.c_str());
+
+    // 设置User-Agent
+    std::string useragent = ("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:13.0) Gecko/20100101 Firefox/13.0.1");
+    curl_easy_setopt(m_pCurl, CURLOPT_USERAGENT, useragent.c_str());
+
+    // 设置重定向的最大次数
+    curl_easy_setopt(m_pCurl, CURLOPT_MAXREDIRS, 5);
+
+    // 设置301、302跳转跟随location
+    curl_easy_setopt(m_pCurl, CURLOPT_FOLLOWLOCATION, 1);
+
+    curl_easy_setopt(m_pCurl, CURLOPT_NOSIGNAL, 1L);
+    curl_easy_setopt(m_pCurl, CURLOPT_POST, false);
+
+    // 下载内容回调函数
+    curl_easy_setopt(m_pCurl, CURLOPT_WRITEFUNCTION, handleWrite);
+    curl_easy_setopt(m_pCurl, CURLOPT_WRITEDATA, this);
+
+    // 进度回调函数
+    curl_easy_setopt(m_pCurl, CURLOPT_NOPROGRESS, 0);
+    curl_easy_setopt(m_pCurl, CURLOPT_PROGRESSDATA, this);
+    curl_easy_setopt(m_pCurl, CURLOPT_PROGRESSFUNCTION, handleProgress);
+
+    // 跳过服务器SSL验证，不使用CA证书
+    curl_easy_setopt(m_pCurl, CURLOPT_SSL_VERIFYPEER, 0L);
+
+    // 验证服务器端发送的证书，默认是 2(高)，1（中），0（禁用）
+    curl_easy_setopt(m_pCurl, CURLOPT_SSL_VERIFYHOST, 0L);
+}
+
+void httpDownload::clear()
+{
+    if (m_pFile)
+    {
+        fclose(m_pFile);
+        m_pFile = NULL;
+    }
+
+    if (m_pCurl)
+    {
+        curl_easy_cleanup(m_pCurl);
+        m_pCurl = NULL;
+        curl_global_cleanup();
+    }
+
+    m_strDownloadUrl.clear();
+    m_strLocalFilePath.clear();
 }

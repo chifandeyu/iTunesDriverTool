@@ -203,7 +203,8 @@ __ReturnClean:
 
 bool iTunesServiceCheck::servicIsRunning()
 {
-    return IsServiceRunning(L"Apple Mobile Device Service");
+    return (IsServiceRunning(L"Apple Mobile Device Service") 
+        || IsServiceRunning(L"Apple Mobile Device"));
 }
 
 bool iTunesServiceCheck::checkAAS32()

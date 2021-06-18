@@ -43,6 +43,7 @@ RepairDriver::RepairDriver(QWidget *parent)
 RepairDriver::~RepairDriver()
 {
     if (m_pDownloader) {
+        m_pDownloader->cancel();
         m_pDownloader->deleteLater();
         m_pDownloader = nullptr;
     }
@@ -223,6 +224,9 @@ void RepairDriver::doRepair()
         if (md5 == m_zipPackage.strHashCode) {
             m_pInstaller->onInstallDriver(m_zipPackage.strLocalPath);
             has = true;
+        }
+        else {
+            QFile::remove(m_zipPackage.strLocalPath);
         }
     }
     if (!has) {

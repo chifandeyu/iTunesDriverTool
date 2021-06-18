@@ -98,6 +98,7 @@ void iTunesDriverDlg::setProgressValue(qint64 bytesReceived, qint64 bytesTotal, 
 {
     ui.m_pProgDriverDown->setMaximum(bytesTotal);
     ui.m_pProgDriverDown->setValue(bytesReceived);
+    ui.m_pProgDriverDown->update();
     ui.MMDownDrvSpeed->setText(strSpeed);
 }
 

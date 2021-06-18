@@ -45,6 +45,16 @@ TRANSLATIONS += \
 
 LIBS += -lAdvapi32 -lShell32
 
+INCLUDEPATH += $$PWD/curl
+DEPENDPATH += $$PWD/curl
+
+win32:CONFIG(release, debug|release){
+    LIBS += -L$$PWD/curl/ -llibcurl
+}
+else:win32:CONFIG(debug, debug|release){
+    LIBS += -L$$PWD/curl/ -llibcurl-d
+}
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
