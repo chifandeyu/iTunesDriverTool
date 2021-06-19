@@ -33,7 +33,15 @@ class iTunesDriverInstall;
 class RepairDriver : public commonWidget
 {
     Q_OBJECT
-
+    typedef enum StackedWidget
+    {
+        EMMNonePage = 0,
+        EMMDownDrvPage,		    //驱动下载中
+        EMMInstallingPage,		//驱动安装中
+        EMMInstallSuccPage,		//驱动安装成功
+        EMMInstallFailedPage,	//驱动安装失败
+        EUnInstallPage,	//驱动安装失败
+    }EStackedDrvWidgetPage;
 public:
     RepairDriver(QWidget *parent = Q_NULLPTR);
     ~RepairDriver();
@@ -69,4 +77,5 @@ private:
     //QMap<int, iTunesDriverEntity> m_entityMap;
     zipPackageInfo m_zipPackage;
     bool m_bDownloadFailed = false;
+    bool m_bProc = false;
 };

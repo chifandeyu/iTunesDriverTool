@@ -161,11 +161,11 @@ void httpDownload::onDownload()
         qDebug() << "==== httpcancel";
         isSuccess = false;
     }
+    QString errStr;
     // ÏÂÔØÊ§°Ü
     if (return_code != CURLE_OK)
     {
-        QString errStr = curl_easy_strerror(return_code);
-        emit sigErorr(errStr);
+        errStr = curl_easy_strerror(return_code);
         isSuccess = false;
     }
 
@@ -175,7 +175,8 @@ void httpDownload::onDownload()
     if (response_code != 200)
     {
         qDebug() << "http code: " << response_code;
-        emit sigErorr(QString("http error code:").arg(response_code));
+        if(errStr.isEmpty())
+            errStr = QString("http error code: %1").arg(response_code);
         isSuccess = false;
     }
 
@@ -189,6 +190,10 @@ void httpDownload::onDownload()
     {
         emit sigFinished();
         qDebug() << "==== httpFinished";
+    }
+    else
+    {
+        emit sigErorr(errStr);
     }
 }
 

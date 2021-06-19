@@ -27,13 +27,15 @@ RepairDriver::RepairDriver(QWidget *parent)
     });
     connect(ui.m_pUpdateBtn, &QPushButton::clicked, [this]() {
         checkAllDriver();
+        if(!m_bProc)
+            ui.stackedWidget->setCurrentIndex(EMMNonePage);
     });
     //m_pDwonloadDlg = new ToolWnd(this);
     //m_pDwonloadDlg->show();
     m_pInstaller = new iTunesDriverInstall();
     m_pInstaller->start();
     getConfig();
-    m_iTunesDriverDlg = new iTunesDriverDlg(this);
+    //m_iTunesDriverDlg = new iTunesDriverDlg(this);
     //m_iTunesDriverDlg->show();
 
     m_pDownloader = new httpDownload();
@@ -121,18 +123,26 @@ void RepairDriver::slotProgress(qint64 bytesReceived, qint64 bytesTotal, const Q
     //m_pDwonloadDlg->setProgressValue(bytesReceived, bytesTotal, strSpeed);
     if (bytesReceived == 0 && bytesReceived == 0)
         return;
-    m_iTunesDriverDlg->setProgressValue(bytesReceived, bytesTotal, strSpeed);
+    //m_iTunesDriverDlg->setProgressValue(bytesReceived, bytesTotal, strSpeed);
+    ui.m_pProgDriverDown->setMaximum(bytesTotal);
+    ui.m_pProgDriverDown->setValue(bytesReceived);
+    ui.m_pProgDriverDown->update();
+    ui.MMDownDrvSpeed->setText(strSpeed);
 }
 
 void RepairDriver::slotDownloadErorr(const QString& errStr)
 {
     m_bDownloadFailed = true;
-    m_iTunesDriverDlg->onInstallDrvFailed(QStringLiteral("iTunes驱动下载失败！%1").arg(errStr));
+    m_bProc = false;
+    //m_iTunesDriverDlg->onInstallDrvFailed();
+    ui.stackedWidget->setCurrentIndex(EMMInstallFailedPage);
+    ui.MMInstallDrvMsg->setText(QStringLiteral("iTunes驱动下载失败！%1").arg(errStr));
 }
 
 void RepairDriver::slotStartDownload()
 {
-    m_iTunesDriverDlg->onStartDownload();
+    //m_iTunesDriverDlg->onStartDownload();
+    ui.stackedWidget->setCurrentIndex(EMMDownDrvPage);
 }
 
 void RepairDriver::slotDownloadFinished()
@@ -147,7 +157,9 @@ void RepairDriver::slotInstallFinish()
     //check all
     bool isOk = checkAllDriver();
     if (isOk) {
-        m_iTunesDriverDlg->onInstallDrvSucc();
+        ui.stackedWidget->setCurrentIndex(EMMInstallSuccPage);
+        //ui.titleLab->setText(QStringLiteral("驱动安装成功"));
+
         QString strAASPath, strAAS64Path, strAMDSPath, strAMDS64Path, BonjourPath, Bonjour64Path;;
         iTunesDriverInstall::GetIosDriverPaths(strAASPath, strAAS64Path, strAMDSPath, strAMDS64Path,
             BonjourPath, Bonjour64Path);
@@ -159,19 +171,23 @@ void RepairDriver::slotInstallFinish()
         QFile::remove(Bonjour64Path);
     }
     else {
-        m_iTunesDriverDlg->onInstallDrvFailed(QStringLiteral("iTunes 驱动安装失败！"));
+        ui.stackedWidget->setCurrentIndex(EMMInstallFailedPage);
+        ui.MMInstallDrvMsg->setText(QStringLiteral("iTunes 驱动安装失败！"));
     }
+    m_bProc = false;
 }
 
 void RepairDriver::slotInstalling(QString packageName)
 {
     //m_pDwonloadDlg->setInsatllFileName(packageName);
-    m_iTunesDriverDlg->setInsatllFileName(packageName);
+    //m_iTunesDriverDlg->setInsatllFileName(packageName);
+    ui.MMInstallingDrvFile->setText(packageName);
 }
 
 void RepairDriver::slotStartInstall()
 {
-    m_iTunesDriverDlg->onStartInstallDrv();
+    //m_iTunesDriverDlg->onStartInstallDrv();
+    ui.stackedWidget->setCurrentIndex(EMMInstallingPage);
 }
 
 void RepairDriver::slotUninstallDriver(bool bFinish)
@@ -180,15 +196,20 @@ void RepairDriver::slotUninstallDriver(bool bFinish)
         //m_iTunesDriverDlg->InitInstallIosDrvSuccFrame();
     }
     else {
-        m_iTunesDriverDlg->onStartUninstallDrv();
+        //m_iTunesDriverDlg->onStartUninstallDrv();
+        ui.stackedWidget->setCurrentIndex(EUnInstallPage);
     }
 }
 
 void RepairDriver::slotDoRepair()
 {
+    if (m_bProc)
+        return;
+
     m_bDownloadFailed = false;
+    m_bProc = true;
     doRepair();
-    m_iTunesDriverDlg->exec();
+    ui.widget_proc_page->setVisible(true);
 }
 
 bool RepairDriver::nativeEvent(const QByteArray& eventType, void* message, long* result)
@@ -326,5 +347,5 @@ void RepairDriver::connSigSlot()
     connect(m_pInstaller, &iTunesDriverInstall::sigInstallFinish, this, &RepairDriver::slotInstallFinish);
     connect(m_pInstaller, &iTunesDriverInstall::sigUninstallDriver, this, &RepairDriver::slotUninstallDriver);
 
-    connect(m_iTunesDriverDlg, &iTunesDriverDlg::sigCancel, this, &RepairDriver::slotCancel);
+    //connect(m_iTunesDriverDlg, &iTunesDriverDlg::sigCancel, this, &RepairDriver::slotCancel);
 }
