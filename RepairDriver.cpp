@@ -6,7 +6,7 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include "iTunesDriverInstall.h"
-#include "iTunesDriverDlg.h"
+//#include "iTunesDriverDlg.h"
 #include <windows.h>
 
 RepairDriver::RepairDriver(QWidget *parent)

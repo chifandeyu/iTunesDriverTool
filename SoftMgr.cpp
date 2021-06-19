@@ -337,7 +337,7 @@ bool SoftMgr::uninstallApp(const wchar_t *wszName)
             }
             
             QProcess pp;
-            qInfo() << "uninstall "<< wszName <<"run " << uninstall;
+            qInfo() << "uninstall "<< QString::fromStdWString(std::wstring(wszName)) <<"run " << uninstall;
             pp.execute(uninstall);
             auto ss = QString(pp.readAllStandardError());
             if (!ss.isEmpty()) {

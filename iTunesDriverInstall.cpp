@@ -102,12 +102,16 @@ void iTunesDriverInstall::unInstallDriver()
     emit sigUninstallDriver(false);
     const wchar_t* wszASUName = L"Apple Software Update";
     sinfo.uninstallApp(wszASUName);
-    const wchar_t* wszBonjour = L"Bonjour";
-    sinfo.uninstallApp(wszBonjour);
+    
     const wchar_t* wszAMDSName = L"Apple Mobile Device Support";
     sinfo.uninstallApp(wszAMDSName);
+
+    const wchar_t* wszBonjour = L"Bonjour";
+    sinfo.uninstallApp(wszBonjour);
+    
     const wchar_t *wszAASName = L"Apple 应用程序支持 (32 位)";
     sinfo.uninstallApp(wszAASName);
+
     const wchar_t* wszAAS64Name = L"Apple 应用程序支持 (64 位)";
     sinfo.uninstallApp(wszAAS64Name);
     emit sigUninstallDriver(true);

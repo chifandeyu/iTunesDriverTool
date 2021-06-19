@@ -70,7 +70,7 @@ private:
     QString m_fileUrl;
     QString m_configStr;
     //ToolWnd *m_pDwonloadDlg = nullptr;
-    iTunesDriverDlg* m_iTunesDriverDlg = nullptr;
+    //iTunesDriverDlg* m_iTunesDriverDlg = nullptr;
     httpDownload* m_pDownloader = nullptr;
     iTunesDriverInstall* m_pInstaller = nullptr;
     iTunesServiceCheck *m_iTunesChecker = nullptr;
