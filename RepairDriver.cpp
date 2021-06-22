@@ -8,6 +8,9 @@
 #include "iTunesDriverInstall.h"
 //#include "iTunesDriverDlg.h"
 #include <windows.h>
+#include <QTimer>
+
+typedef void (WINAPI* PROCSWITCHTOTHISWINDOW)(HWND, BOOL);
 
 RepairDriver::RepairDriver(QWidget *parent)
     : commonWidget(parent)
@@ -23,6 +26,18 @@ RepairDriver::RepairDriver(QWidget *parent)
     ui.widget_appleUSBConnect->setVisible(false);
     connect(ui.pushButton, &QPushButton::clicked, this, &RepairDriver::slotDoRepair);
     connect(ui.closeBtn, &QPushButton::clicked, [this]() {
+        if (m_bProc)
+        {
+            ui.label_warning->setVisible(true);
+            ui.label_warning->setText(QStringLiteral("正在进行修复驱动，请稍后关闭......"));
+            ui.label_tips->setVisible(false);
+            qDebug() << "is procing driver...";
+            QTimer::singleShot(3800, [this]() {
+                ui.label_warning->setVisible(false);
+                ui.label_tips->setVisible(true);
+            });
+            return;
+        }
         close();
     });
     connect(ui.m_pUpdateBtn, &QPushButton::clicked, [this]() {
@@ -32,6 +47,7 @@ RepairDriver::RepairDriver(QWidget *parent)
     });
     //m_pDwonloadDlg = new ToolWnd(this);
     //m_pDwonloadDlg->show();
+    ui.label_warning->setVisible(false);
     m_pInstaller = new iTunesDriverInstall();
     m_pInstaller->start();
     getConfig();
@@ -225,6 +241,17 @@ bool RepairDriver::nativeEvent(const QByteArray& eventType, void* message, long*
             if (strcmp(buf, "activeWnd") == 0)
             {
                 activateWindow();
+                setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+                raise();//必须加，不然X11会不起作用
+#ifdef Q_OS_WIN32
+                HWND hWnd = (HWND)winId();
+                PROCSWITCHTOTHISWINDOW SwitchToThisWindow = NULL;
+                HMODULE hUser32 = GetModuleHandle(TEXT("user32"));
+                SwitchToThisWindow = (PROCSWITCHTOTHISWINDOW)GetProcAddress(hUser32, "SwitchToThisWindow");
+                if (SwitchToThisWindow) {
+                    SwitchToThisWindow(hWnd, TRUE);
+                }
+#endif //Q_OS_WIN32
             }
             delete[]buf;
             return true;

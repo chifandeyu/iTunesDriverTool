@@ -5,7 +5,6 @@
 #include <QCryptographicHash>
 
 typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
-LPFN_ISWOW64PROCESS fnIsWow64Process;
 
 bool IsServiceRunning(LPCTSTR pszName)
 {
@@ -98,6 +97,7 @@ iTunesServiceCheck::iTunesServiceCheck(QObject *parent) : QObject(parent)
 bool iTunesServiceCheck::IsWow64()
 {
     BOOL bIsWow64 = FALSE;
+    LPFN_ISWOW64PROCESS fnIsWow64Process = NULL;
     fnIsWow64Process = (LPFN_ISWOW64PROCESS)GetProcAddress(
         GetModuleHandle(TEXT("kernel32")), "IsWow64Process");
 
