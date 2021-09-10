@@ -36,11 +36,17 @@ SoftMgr::~SoftMgr()
 {
 }
 
-bool SoftMgr::GetSoftInfo()
+bool SoftMgr::init()
+{
+    m_softInfoList.clear(); //清空当前的应用列表
+    return GetSoftInfo(m_softInfoList, HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall");
+}
+
+bool SoftMgr::GetSoftInfo(QList<SOFTINFO>& softInfoList, HKEY hKey, const wchar_t* strKeyPath)
 {
     LONG lRet;
     int nIndex;
-    HKEY hKey = HKEY_LOCAL_MACHINE;
+    //HKEY hKey = HKEY_LOCAL_MACHINE;
     HKEY hResultKey;
     HKEY hSubResultKey;
     wchar_t  cSubKeyName[512];//注册表项名称
@@ -48,10 +54,10 @@ bool SoftMgr::GetSoftInfo()
     wchar_t cValueBuffer[512] = { 0 };
     DWORD dwValueType;
     DWORD dwSize = 512;
-    const wchar_t* strKeyPath = L"Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall";
+    //const wchar_t* strKeyPath = L"Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall";
     std::wstring strSubKeyPath = strKeyPath;
     m_strError.clear();
-    m_vecSoftInfo.clear(); //清空当前的应用列表
+
     if (Is64BitSystem())
     {
         //32位应用跳转到WOW64_32NODE
@@ -120,7 +126,7 @@ bool SoftMgr::GetSoftInfo()
                 dwSize = 512;
                 if (stSoftInfoItem.m_strSoftName != "")
                 {
-                    m_vecSoftInfo.push_back(stSoftInfoItem);
+                    softInfoList.push_back(stSoftInfoItem);
                 }
             }
             if (hSubResultKey != NULL)
@@ -202,7 +208,7 @@ bool SoftMgr::GetSoftInfo()
                 dwSize = 512;
                 if (stSoftInfoItem.m_strSoftName != "")
                 {
-                    m_vecSoftInfo.push_back(stSoftInfoItem);
+                    softInfoList.push_back(stSoftInfoItem);
                 }
             }
             if (hSubResultKey != NULL)
@@ -285,7 +291,7 @@ bool SoftMgr::GetSoftInfo()
                 dwSize = 512;
                 if (stSoftInfoItem.m_strSoftName != "")
                 {
-                    m_vecSoftInfo.push_back(stSoftInfoItem);
+                    softInfoList.push_back(stSoftInfoItem);
                 }
             }
             if (hSubResultKey != NULL)
@@ -310,8 +316,8 @@ bool SoftMgr::uninstallApp(const wchar_t *wszName)
     if (!m_strError.isEmpty()) {
         qDebug() << m_strError;
     }
-    qDebug() << m_vecSoftInfo.size();
-    for (int i = 0; i < m_vecSoftInfo.size(); i++)
+    qDebug() << m_softInfoList.size();
+    for (int i = 0; i < m_softInfoList.size(); i++)
     {
         //qDebug() << QString("%1 %2 %3 %4 %5")
         //    .arg(m_vecSoftInfo[i].m_strSoftName)
@@ -322,9 +328,9 @@ bool SoftMgr::uninstallApp(const wchar_t *wszName)
 
         DWORD dwSize = wcslen(wszName);
         QString name = QString::fromUtf16(reinterpret_cast<const ushort *>(wszName), dwSize);
-        if (m_vecSoftInfo[i].m_strSoftName == name)
+        if (m_softInfoList[i].m_strSoftName == name)
         {
-            QString uninstall = m_vecSoftInfo[i].m_strUninstallPath;
+            QString uninstall = m_softInfoList[i].m_strUninstallPath;
             int index = uninstall.indexOf("MsiExec.exe /I",0, Qt::CaseInsensitive);
             if (index != -1) {
                 uninstall = QString("MsiExec.exe /x ") + uninstall.mid(index + QString("MsiExec.exe /I").length()) + QString(" /quiet");

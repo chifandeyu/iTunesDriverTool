@@ -3,6 +3,7 @@
 #include <QObject>
 #include <string>
 #include <QVector>
+#include <windows.h>
 
 typedef struct softInfo
 {
@@ -29,12 +30,13 @@ class SoftMgr : public QObject
 public:
     SoftMgr(QObject *parent = nullptr);
     ~SoftMgr();
-    bool GetSoftInfo();
+    bool init();
+    bool GetSoftInfo(QList<SOFTINFO>& softInfoList, HKEY hKey, const wchar_t* strKeyPath);
     bool uninstallApp(const wchar_t *wszName);
 signals:
     void uninstallAppErr(AppleAppType);
 
 private:
-    QVector<SOFTINFO> m_vecSoftInfo;
+    QList<SOFTINFO> m_softInfoList;
     QString m_strError;
 };

@@ -98,7 +98,7 @@ bool iTunesDriverInstall::unZipPackage(const QString &filePath)
 void iTunesDriverInstall::unInstallDriver()
 {
     SoftMgr sinfo;
-    sinfo.GetSoftInfo();
+    sinfo.init();
     emit sigUninstallDriver(false);
     const wchar_t* wszASUName = L"Apple Software Update";
     sinfo.uninstallApp(wszASUName);
